@@ -1,0 +1,35 @@
+.loader {
+  background: #fff;
+  border-radius: 100%;
+  animation: spin-anim 1.2s linear infinite;
+  border-style: solid;
+  border-color: #6c757d #6c757d #6c757d transparent;
+  box-sizing: border-box;
+
+  &.loader_size-l {
+    height: 6rem;
+    width: 6rem;
+    border-width: 6px;
+  }
+
+  &.loader_size-m {
+    height: 4rem;
+    width: 4rem;
+    border-width: 0.45rem;
+  }
+
+  &.loader_size-s {
+    height: 2rem;
+    width: 2rem;
+    border-width: 0.3rem;
+  }
+}
+
+@keyframes spin-anim {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
