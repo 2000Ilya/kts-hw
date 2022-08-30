@@ -1,0 +1,17 @@
+.input {
+  width: 26.9rem;
+  height: 4rem;
+  background: #ffffff;
+  border: 1px solid #dfe2e4;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  color: #dfe2e4;
+  &:focus {
+    outline: none;
+    border: 1px solid black;
+  }
+  &::placeholder {
+    color: #dfe2e4;
+  }
+}
