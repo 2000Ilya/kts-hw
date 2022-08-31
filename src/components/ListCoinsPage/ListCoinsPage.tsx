@@ -49,12 +49,10 @@ const ListCoinsPage: React.FC = () => {
   }, []);
 
   const fetchMoreCoins = async () => {
-    await setTimeout(async () => {
-      const coinsData = await fetchCoinsData();
-      const nextCoins = coinsData.success ? coinsData.data : [];
-      setCoinsList((coins) => coins.concat(nextCoins));
-      setNextPage();
-    }, 2000);
+    const coinsData = await fetchCoinsData();
+    const nextCoins = coinsData.success ? coinsData.data : [];
+    setCoinsList((coins) => coins.concat(nextCoins));
+    setNextPage();
   };
 
   return (
