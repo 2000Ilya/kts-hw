@@ -1,14 +1,14 @@
 .button {
-    width: 3.8rem;
-    height: 1.5rem;
-    font-size: 1.2rem;
-    line-height: 1.5rem;
-    color: #343A40;
-    background: #FFFFFF;
-    border: none;
-    cursor: pointer;
+  width: 3.8rem;
+  height: 1.5rem;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  color: #343a40;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 
-    &:hover {
-        opacity: 0.7;
-    }
+  &:hover {
+    opacity: 0.7;
+  }
 }

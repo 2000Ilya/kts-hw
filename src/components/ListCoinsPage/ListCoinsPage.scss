@@ -15,15 +15,9 @@
     margin-top: 5.8rem;
     margin-bottom: 3.4rem;
   }
-
-  .coins-list {
+  .coins-list-container {
+    height: calc(100vh - 13.6rem);
     width: 100%;
-    display: flex;
-    padding: 0.8rem 0;
-    align-items: center;
-    flex-direction: column;
-    gap: 0.8rem;
-    overflow: scroll;
     overflow-x: hidden;
 
     &::-webkit-scrollbar {
