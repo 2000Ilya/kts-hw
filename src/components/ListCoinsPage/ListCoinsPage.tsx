@@ -4,6 +4,7 @@ import "./ListCoinsPage.scss";
 import Button from "@components/Button";
 import Card from "@components/Card";
 import Input from "@components/Input";
+import { Loader } from "@components/Loader";
 import { CoinItem } from "@store/CoinGeckoStore/types";
 import coinGeckoStore from "@store/coinGeckoStoreInstance";
 import roundNumber from "@utils/roundNumber";
@@ -45,22 +46,28 @@ const ListCoinsPage: React.FC = () => {
         />
         <Button>cancel</Button>
       </div>
-      <div className={"coins-list"}>
-        {coinsList.map((coinItem) => (
-          <Link to={`/coins/${coinItem.id}`}>
-            <Card
-              key={coinItem.id}
-              image={coinItem.image}
-              title={coinItem.name}
-              subtitle={coinItem.symbol}
-              currentPrice={`${roundNumber(coinItem.current_price)}`}
-              priceChangePercentage={`${roundNumber(
-                coinItem.price_change_percentage_24h
-              )}%`}
-            />
-          </Link>
-        ))}
-      </div>
+      {coinsList.length > 0 ? (
+        <div className={"coins-list"}>
+          {coinsList.map((coinItem) => (
+            <Link to={`/coins/${coinItem.id}`}>
+              <Card
+                key={coinItem.id}
+                image={coinItem.image}
+                title={coinItem.name}
+                subtitle={coinItem.symbol}
+                currentPrice={`${roundNumber(coinItem.current_price)}`}
+                priceChangePercentage={`${roundNumber(
+                  coinItem.price_change_percentage_24h
+                )}%`}
+              />
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <div className={"fullfilled-container flex-align-center"}>
+          <Loader />
+        </div>
+      )}
     </div>
   );
 };
