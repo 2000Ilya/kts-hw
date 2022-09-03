@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import "./ListCoinsPage.scss";
-import Button from "@components/Button";
+import { Button } from "@components/Button";
 import Card from "@components/Card";
 import Input from "@components/Input";
 import { Loader, LoaderSize } from "@components/Loader";
@@ -63,7 +63,7 @@ const ListCoinsPage: React.FC = () => {
           value={inputValue}
           onChange={setInputValue}
         />
-        <Button>cancel</Button>
+        <Button>Search</Button>
       </div>
       {coinsList.length > 0 ? (
         <div className={"coins-list-container"} id={"coins-list"}>

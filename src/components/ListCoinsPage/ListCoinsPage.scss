@@ -2,18 +2,15 @@
   width: 37.5rem;
   height: 100vh;
   display: flex;
-  align-items: center;
   flex-direction: column;
   background: #f8f9fa;
 
   .search-bar-container {
-    padding-right: 1.6rem;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 1.5rem;
-    margin-top: 5.8rem;
-    margin-bottom: 3.4rem;
+    margin: 5.8rem auto 3.4rem 1.6rem;
   }
   .coins-list-container {
     height: calc(100vh - 13.6rem);

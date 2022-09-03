@@ -1,20 +1,20 @@
 import classnames from "classnames";
 
 import "./Button.scss";
-import { Loader } from "../Loader";
+import { Loader, LoaderSize } from "../Loader";
 
-enum ButtonColor {
+export enum ButtonColor {
   primary = "primary",
   secondary = "secondary",
 }
 
-type ButtonProps = React.PropsWithChildren<{
+export type ButtonProps = React.PropsWithChildren<{
   loading?: boolean;
   color?: ButtonColor;
 }> &
   React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const Button = ({
+export const Button = ({
   color = ButtonColor.primary,
   loading,
   children,
@@ -31,9 +31,7 @@ const Button = ({
       disabled={loading || restProps.disabled}
     >
       {children}
-      {loading && <Loader loading />}
+      {loading && <Loader loading size={LoaderSize.s} />}
     </button>
   );
 };
-
-export default Button;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Button from "@components/Button";
+import { Button } from "@components/Button";
 import Card from "@components/Card";
 import Input from "@components/Input";
 import { Loader, LoaderSize } from "@components/Loader";
