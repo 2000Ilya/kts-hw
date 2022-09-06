@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import ArrowLeftIcon from "@components/ArrowLeftIcon";
 import { Loader, LoaderSize } from "@components/Loader";
@@ -77,4 +77,4 @@ const CoinInfoPage = () => {
   );
 };
 
-export default CoinInfoPage;
+export default React.memo(CoinInfoPage);

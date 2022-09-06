@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Loader } from "../Loader";
 
 type WithLoaderProps = React.PropsWithChildren<{
@@ -13,4 +15,4 @@ const WithLoader = ({ loading, children }: WithLoaderProps) => {
   );
 };
 
-export default WithLoader;
+export default React.memo(WithLoader);

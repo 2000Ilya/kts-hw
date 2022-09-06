@@ -1,3 +1,5 @@
+import React from "react";
+
 import classNames from "classnames";
 
 import "./Input.scss";
@@ -26,4 +28,4 @@ const Input = ({ value, onChange, ...restProps }: InputProps) => {
   );
 };
 
-export default Input;
+export default React.memo(Input);

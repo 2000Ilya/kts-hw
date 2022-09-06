@@ -1,3 +1,5 @@
+import React from "react";
+
 const ArrowDownIcon = () => {
   return (
     <svg
@@ -15,4 +17,4 @@ const ArrowDownIcon = () => {
   );
 };
 
-export default ArrowDownIcon;
+export default React.memo(ArrowDownIcon);

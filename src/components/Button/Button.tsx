@@ -1,3 +1,5 @@
+import React from "react";
+
 import classnames from "classnames";
 
 import "./Button.scss";
@@ -14,24 +16,26 @@ export type ButtonProps = React.PropsWithChildren<{
 }> &
   React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export const Button = ({
-  color = ButtonColor.primary,
-  loading,
-  children,
-  ...restProps
-}: ButtonProps) => {
-  return (
-    <button
-      {...restProps}
-      className={classnames(
-        "button",
-        { [`button_color-${color}`]: !!color },
-        (loading || restProps.disabled) && "button_disabled"
-      )}
-      disabled={loading || restProps.disabled}
-    >
-      {children}
-      {loading && <Loader loading size={LoaderSize.s} />}
-    </button>
-  );
-};
+export const Button = React.memo(
+  ({
+    color = ButtonColor.primary,
+    loading,
+    children,
+    ...restProps
+  }: ButtonProps) => {
+    return (
+      <button
+        {...restProps}
+        className={classnames(
+          "button",
+          { [`button_color-${color}`]: !!color },
+          (loading || restProps.disabled) && "button_disabled"
+        )}
+        disabled={loading || restProps.disabled}
+      >
+        {children}
+        {loading && <Loader loading size={LoaderSize.s} />}
+      </button>
+    );
+  }
+);

@@ -1,3 +1,5 @@
+import React from "react";
+
 type CheckBoxProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
   "onChange"
@@ -17,4 +19,4 @@ const CheckBox = ({ onChange, ...restProps }: CheckBoxProps) => {
   );
 };
 
-export default CheckBox;
+export default React.memo(CheckBox);

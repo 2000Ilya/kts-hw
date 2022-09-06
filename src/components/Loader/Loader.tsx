@@ -1,3 +1,5 @@
+import React from "react";
+
 import classNames from "classnames";
 
 import "./Loader.scss";
@@ -14,17 +16,15 @@ type LoaderProps = {
   className?: string;
 };
 
-export const Loader: React.FC<LoaderProps> = ({
-  size = LoaderSize.m,
-  className = "",
-  loading = true,
-}: LoaderProps) =>
-  loading ? (
-    <div
-      className={classNames("loader", !!className && className, {
-        ["loader_size-l"]: size === LoaderSize.l,
-        ["loader_size-m"]: size === LoaderSize.m,
-        ["loader_size-s"]: size === LoaderSize.s,
-      })}
-    />
-  ) : null;
+export const Loader: React.FC<LoaderProps> = React.memo(
+  ({ size = LoaderSize.m, className = "", loading = true }: LoaderProps) =>
+    loading ? (
+      <div
+        className={classNames("loader", !!className && className, {
+          ["loader_size-l"]: size === LoaderSize.l,
+          ["loader_size-m"]: size === LoaderSize.m,
+          ["loader_size-s"]: size === LoaderSize.s,
+        })}
+      />
+    ) : null
+);
