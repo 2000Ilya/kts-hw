@@ -14,58 +14,52 @@
   margin: 0.8rem auto;
   box-sizing: border-box;
   cursor: pointer;
-}
 
-.card__left-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1.2rem;
-}
+  &__left-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.2rem;
+  }
 
-.card__logo {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 100%;
-}
+  &__logo {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100%;
+  }
 
-.card__currency-name-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  &__currency-name-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  &__currency-short-name {
+    font-size: 12px;
+    line-height: 15px;
+    color: $dark-grey;
+    margin: 0;
+  }
+
+  &__value-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: end;
+  }
+
+  &__value-diff {
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.3rem;
+    color: $green;
+    margin: 0;
+  }
 }
 
 .card-header {
   font-size: 1.6rem;
   line-height: 2rem;
   color: $black;
-  margin: 0;
-}
-
-.card__currency-name {
-}
-
-.card__currency-short-name {
-  font-size: 12px;
-  line-height: 15px;
-  color: $dark-grey;
-  margin: 0;
-}
-
-.card__value-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: end;
-}
-
-.card__value {
-}
-
-.card__value-diff {
-  font-weight: 500;
-  font-size: 1rem;
-  line-height: 1.3rem;
-  color: $green;
   margin: 0;
 }

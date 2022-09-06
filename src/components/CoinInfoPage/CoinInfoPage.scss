@@ -1,72 +1,69 @@
 @import "../../variables.scss";
 
 .coin-info-page {
-  width: 375px;
+  width: 37.5rem;
   background: $white;
   padding-left: 1.6rem;
 
-  .coin-info-page__header-group {
+  &__header-group {
     display: flex;
     flex-direction: row;
     align-items: center;
     height: 2.4rem;
     margin-top: 1.7rem;
-
-    .coin-info-page__back {
-      width: 0.93rem;
-      height: 1.42rem;
-    }
-    .coin-info-page__info-group {
-      margin-left: 1.66rem;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      .coin-info-page__coin-image {
-        width: 2.4rem;
-        border-radius: 100%;
-      }
-
-      .coin-info-page__coin-name-group {
-        .coin-info-page__coin-name {
-          font-size: 1.6rem;
-          line-height: 2rem;
-          color: $black;
-          margin: 0;
-          margin-left: 0.8rem;
-        }
-
-        .coin-info-page__coin-symbol {
-          font-size: 1rem;
-          line-height: 1.3rem;
-          color: $dark-grey;
-          text-transform: uppercase;
-          margin: 0;
-          margin-left: 0.4rem;
-        }
-      }
-    }
+  }
+  &__back {
+    width: 0.93rem;
+    height: 1.42rem;
+  }
+  &__info-group {
+    margin-left: 1.66rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
-  .coin-info-page__coin-value-group {
+  &__coin-image {
+    width: 2.4rem;
+    border-radius: 100%;
+  }
+
+  &__coin-name {
+    font-size: 1.6rem;
+    line-height: 2rem;
+    color: $black;
+    margin: 0;
+    margin-left: 0.8rem;
+  }
+
+  &__coin-symbol {
+    font-size: 1rem;
+    line-height: 1.3rem;
+    color: $dark-grey;
+    text-transform: uppercase;
+    margin: 0;
+    margin-left: 0.4rem;
+  }
+
+  &__coin-value-group {
     display: flex;
     flex-direction: row;
     margin-top: 1.6rem;
+  }
 
-    .coin-info-page__coin-value {
-      font-weight: 500;
-      font-size: 2.4rem;
-      line-height: 3rem;
-      color: $black;
-      margin: 0;
-    }
+  &__coin-value {
+    font-weight: 500;
+    font-size: 2.4rem;
+    line-height: 3rem;
+    color: $black;
+    margin: 0;
+  }
 
-    .coin-info-page__coin-diff {
-      font-size: 1.6rem;
-      line-height: 2rem;
-      color: $green;
-      margin: 0;
-      margin-left: 1.2rem;
-    }
+  &__coin-diff {
+    font-size: 1.6rem;
+    line-height: 2rem;
+    color: $green;
+    margin: 0;
+    margin-left: 1.2rem;
   }
 }

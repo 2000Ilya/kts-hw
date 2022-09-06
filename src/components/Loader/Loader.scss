@@ -8,19 +8,19 @@
   border-color: $dark-grey $dark-grey $dark-grey transparent;
   box-sizing: border-box;
 
-  &.loader_size-l {
+  &_size-l {
     height: 6rem;
     width: 6rem;
     border-width: 0.6rem;
   }
 
-  &.loader_size-m {
+  &_size-m {
     height: 4rem;
     width: 4rem;
     border-width: 0.45rem;
   }
 
-  &.loader_size-s {
+  &_size-s {
     height: 2rem;
     width: 2rem;
     border-width: 0.3rem;
