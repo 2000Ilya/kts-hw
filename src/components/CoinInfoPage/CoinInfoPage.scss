@@ -1,6 +1,8 @@
+@import "../../variables.scss";
+
 .coin-info-page {
   width: 375px;
-  background: #ffffff;
+  background: $white;
   padding-left: 1.6rem;
 
   .coin-info-page__header-group {
@@ -29,7 +31,7 @@
         .coin-info-page__coin-name {
           font-size: 1.6rem;
           line-height: 2rem;
-          color: #212529;
+          color: $black;
           margin: 0;
           margin-left: 0.8rem;
         }
@@ -37,7 +39,7 @@
         .coin-info-page__coin-symbol {
           font-size: 1rem;
           line-height: 1.3rem;
-          color: #6c757d;
+          color: $dark-grey;
           text-transform: uppercase;
           margin: 0;
           margin-left: 0.4rem;
@@ -55,14 +57,14 @@
       font-weight: 500;
       font-size: 2.4rem;
       line-height: 3rem;
-      color: #212529;
+      color: $black;
       margin: 0;
     }
 
     .coin-info-page__coin-diff {
       font-size: 1.6rem;
       line-height: 2rem;
-      color: #21bf73;
+      color: $green;
       margin: 0;
       margin-left: 1.2rem;
     }

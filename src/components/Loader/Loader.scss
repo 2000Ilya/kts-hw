@@ -1,9 +1,11 @@
+@import "../../variables.scss";
+
 .loader {
-  background: #fff;
+  background: $white;
   border-radius: 100%;
   animation: spin-anim 1.2s linear infinite;
   border-style: solid;
-  border-color: #6c757d #6c757d #6c757d transparent;
+  border-color: $dark-grey $dark-grey $dark-grey transparent;
   box-sizing: border-box;
 
   &.loader_size-l {

@@ -1,9 +1,11 @@
+@import "../../variables.scss";
+
 .list-coins-page {
   width: 37.5rem;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f8f9fa;
+  background: $light-grey;
 
   .search-bar-container {
     display: flex;

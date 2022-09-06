@@ -1,8 +1,10 @@
+@import "../../variables.scss";
+
 .button {
   height: 1.5rem;
   font-size: 1.2rem;
   line-height: 1.5rem;
-  color: #343a40;
+  color: $black;
   background: transparent;
   border: none;
   cursor: pointer;
