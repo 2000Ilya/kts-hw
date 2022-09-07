@@ -14,7 +14,9 @@ import styles from "./ListCoinsPage.module.scss";
 
 const ListCoinsPage: React.FC = React.memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [inputValue, setInputValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>(
+    searchParams.get("search") || ""
+  );
   const coinsListStore = useLocalStore(() => new CoinsListStore());
 
   const handleSearchInputChange = useCallback(
