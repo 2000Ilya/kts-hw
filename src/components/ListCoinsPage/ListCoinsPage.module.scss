@@ -7,6 +7,10 @@
   flex-direction: column;
   background: $light-grey;
 
+  &__loader-container {
+    height: 4rem;
+  }
+
   .search-bar-container {
     display: flex;
     flex-direction: row;

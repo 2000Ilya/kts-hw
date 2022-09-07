@@ -76,8 +76,10 @@ const ListCoinsPage: React.FC = () => {
             hasMore={true}
             loader={
               <div
-                className={classNames(styles["flex-align-center"])}
-                style={{ height: "4rem" }}
+                className={classNames(
+                  styles["flex-align-center"],
+                  styles["list-coins-page__loader-container"]
+                )}
               >
                 <Loader size={LoaderSize.s} />
               </div>

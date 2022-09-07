@@ -63,13 +63,11 @@ export const MultiDropdown = React.memo(
         <div
           className={classNames(
             styles["multi-dropdown__selected-option"],
-            styles["flex-align-center"]
+            styles["flex-align-center"],
+            isOptionsShowing &&
+              styles["multi-dropdown__selected-option__showing"]
           )}
           onClick={toggleOptionsShowing}
-          style={{
-            borderRadius: isOptionsShowing ? "1.2rem 1.2rem 0 0" : "1.2rem",
-            borderBottomWidth: isOptionsShowing ? "0" : "",
-          }}
         >
           <span>{pluralizeOptions(value)}</span>
           {isOptionsShowing ? <ArrowUpIcon /> : <ArrowDownIcon />}
