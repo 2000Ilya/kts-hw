@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import ArrowLeftIcon from "@components/ArrowLeftIcon";
 import { Loader, LoaderSize } from "@components/Loader";
@@ -7,6 +7,7 @@ import { Meta } from "@utils/meta";
 import roundNumber from "@utils/roundNumber";
 import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
+import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -75,4 +76,4 @@ const CoinInfoPage = () => {
   );
 };
 
-export default React.memo(CoinInfoPage);
+export default observer(CoinInfoPage);
