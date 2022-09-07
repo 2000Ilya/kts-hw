@@ -1,12 +1,15 @@
 import ApiStore from "@store/ApiStore";
 import { HTTPMethod } from "@store/ApiStore/types";
+import rootStore from "@store/RootStore";
 import { Meta } from "@utils/meta";
 import { ILocalStore } from "@utils/useLocalStore";
 import {
   action,
   computed,
+  IReactionDisposer,
   makeObservable,
   observable,
+  reaction,
   runInAction,
 } from "mobx";
 
@@ -131,7 +134,14 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   }
 
   destroy(): void {
-    // eslint-disable-next-line no-console
-    console.log();
+    this._qPReaction();
   }
+
+  private readonly _qPReaction: IReactionDisposer = reaction(
+    () => rootStore.query.getParam("search"),
+    (search) => {
+      // eslint-disable-next-line no-console
+      console.log(search);
+    }
+  );
 }
