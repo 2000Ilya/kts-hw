@@ -2,8 +2,8 @@ import React from "react";
 
 import classnames from "classnames";
 
-import "./Button.scss";
 import { Loader, LoaderSize } from "../Loader";
+import styles from "./Button.module.scss";
 
 export enum ButtonColor {
   primary = "primary",
@@ -27,9 +27,9 @@ export const Button = React.memo(
       <button
         {...restProps}
         className={classnames(
-          "button",
-          { [`button_color-${color}`]: !!color },
-          (loading || restProps.disabled) && "button_disabled"
+          styles.button,
+          Boolean(color) && styles[`button_color-${color}`],
+          (loading || restProps.disabled) && styles.button_disabled
         )}
         disabled={loading || restProps.disabled}
       >

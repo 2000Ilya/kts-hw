@@ -4,7 +4,7 @@ import ArrowDownIcon from "@components/ArrowDownIcon";
 import ArrowUpIcon from "@components/ArrowUpIcon";
 import classNames from "classnames";
 
-import "./MultiDropdown.scss";
+import styles from "./MultiDropdown.module.scss";
 
 export type Option = {
   key: string;
@@ -59,11 +59,11 @@ export const MultiDropdown = React.memo(
     };
 
     return (
-      <div className={classNames("multi-dropdown")}>
+      <div className={classNames(styles["multi-dropdown"])}>
         <div
           className={classNames(
-            "multi-dropdown__selected-option",
-            "flex-align-center"
+            styles["multi-dropdown__selected-option"],
+            styles["flex-align-center"]
           )}
           onClick={toggleOptionsShowing}
           style={{
@@ -75,12 +75,12 @@ export const MultiDropdown = React.memo(
           {isOptionsShowing ? <ArrowUpIcon /> : <ArrowDownIcon />}
         </div>
         {!disabled && isOptionsShowing && (
-          <div className={classNames("multi-dropdown__options")}>
+          <div className={classNames(styles["multi-dropdown__options"])}>
             {options.map((option) => (
               <div
                 className={classNames(
-                  "multi-dropdown__option",
-                  "flex-align-middle"
+                  styles["multi-dropdown__option"],
+                  styles["flex-align-middle"]
                 )}
                 onClick={() => handleOptionClick(option)}
                 key={option.key}

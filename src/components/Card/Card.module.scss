@@ -35,10 +35,11 @@
   }
 
   &__currency-short-name {
-    font-size: 12px;
-    line-height: 15px;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
     color: $dark-grey;
     margin: 0;
+    text-transform: uppercase;
   }
 
   &__value-container {
@@ -55,11 +56,11 @@
     color: $green;
     margin: 0;
   }
-}
 
-.card-header {
-  font-size: 1.6rem;
-  line-height: 2rem;
-  color: $black;
-  margin: 0;
+  &-header {
+    font-size: 1.6rem;
+    line-height: 2rem;
+    color: $black;
+    margin: 0;
+  }
 }

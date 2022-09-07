@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import "./ListCoinsPage.scss";
 import { Button } from "@components/Button";
 import Card from "@components/Card";
 import Input from "@components/Input";
@@ -8,8 +7,11 @@ import { Loader, LoaderSize } from "@components/Loader";
 import { CoinItem } from "@store/CoinGeckoStore/types";
 import coinGeckoStore from "@store/coinGeckoStoreInstance";
 import roundNumber from "@utils/roundNumber";
+import classNames from "classnames";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
+
+import styles from "./ListCoinsPage.module.scss";
 
 const ListCoinsPage: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
@@ -37,8 +39,6 @@ const ListCoinsPage: React.FC = () => {
       const coinsData = await fetchCoinsData();
       setCoinsList(coinsData.success ? coinsData.data : []);
       setNextPage();
-      // eslint-disable-next-line no-console
-      console.log(coinsData.success ? coinsData.data : []);
     };
 
     firstDataFetch();
@@ -56,8 +56,8 @@ const ListCoinsPage: React.FC = () => {
   };
 
   return (
-    <div className={"list-coins-page"}>
-      <div className={"search-bar-container"}>
+    <div className={classNames(styles["list-coins-page"])}>
+      <div className={classNames(styles["search-bar-container"])}>
         <Input
           placeholder={"Search Cryptocurrency"}
           value={inputValue}
@@ -66,13 +66,19 @@ const ListCoinsPage: React.FC = () => {
         <Button>Search</Button>
       </div>
       {coinsList.length > 0 ? (
-        <div className={"coins-list-container"} id={"coins-list"}>
+        <div
+          className={classNames(styles["coins-list-container"])}
+          id={"coins-list"}
+        >
           <InfiniteScroll
             dataLength={coinsList.length}
             next={fetchMoreCoins}
             hasMore={true}
             loader={
-              <div className={"flex-align-center"} style={{ height: "4rem" }}>
+              <div
+                className={classNames(styles["flex-align-center"])}
+                style={{ height: "4rem" }}
+              >
                 <Loader size={LoaderSize.s} />
               </div>
             }
@@ -95,7 +101,12 @@ const ListCoinsPage: React.FC = () => {
           </InfiniteScroll>
         </div>
       ) : (
-        <div className={"fullfilled-container flex-align-center"}>
+        <div
+          className={classNames(
+            styles["fullfilled-container"],
+            styles["flex-align-center"]
+          )}
+        >
           <Loader />
         </div>
       )}

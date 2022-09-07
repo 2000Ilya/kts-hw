@@ -2,7 +2,7 @@ import React from "react";
 
 import classNames from "classnames";
 
-import "./Input.scss";
+import styles from "./Input.module.scss";
 
 type InputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -16,9 +16,10 @@ const Input = ({ value, onChange, ...restProps }: InputProps) => {
   return (
     <input
       {...restProps}
-      className={classNames("input", {
-        ["input_disabled"]: restProps.disabled,
-      })}
+      className={classNames(
+        styles.input,
+        restProps.disabled && styles["input_disabled"]
+      )}
       type={"text"}
       value={value}
       onChange={(event) => {
