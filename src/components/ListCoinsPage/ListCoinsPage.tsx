@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@components/Button";
 import Input from "@components/Input";
@@ -17,10 +17,13 @@ const ListCoinsPage: React.FC = React.memo(() => {
   const [inputValue, setInputValue] = useState<string>("");
   const coinsListStore = useLocalStore(() => new CoinsListStore());
 
-  const handleSearchInputChange = (text: string): void => {
-    setSearchParams(createSearchParams({ search: text }));
-    setInputValue(text);
-  };
+  const handleSearchInputChange = useCallback(
+    (text: string): void => {
+      setSearchParams(createSearchParams({ search: text }));
+      setInputValue(text);
+    },
+    [searchParams]
+  );
 
   useEffect(() => {
     coinsListStore.getCoinsList({

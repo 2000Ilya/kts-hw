@@ -29,29 +29,37 @@ export const MultiDropdown = React.memo(
   }: MultiDropdownProps) => {
     const [isOptionsShowing, setOptionsShowing] = useState(false);
 
-    const getIndexOfOption = (option: Option, index: number) => {
-      if (option !== undefined) {
-        return value[index].key === option.key;
-      }
-    };
+    const getIndexOfOption = useCallback(
+      (option: Option, index: number) => {
+        if (option !== undefined) {
+          return value[index].key === option.key;
+        }
+        return false;
+      },
+      [value]
+    );
 
-    const toggleOptionsShowing = () => {
+    const toggleOptionsShowing = useCallback(() => {
       setOptionsShowing((isOptionsShowing) => !isOptionsShowing);
-    };
+    }, [isOptionsShowing]);
 
-    const handleOptionClick = useCallback((selectedField: Option) => {
-      const indexOfOption = value.findIndex(getIndexOfOption);
-      if (indexOfOption !== -1) {
-        onChange(
-          value.filter(
-            (val) =>
-              val.key !== selectedField.key && val.value !== selectedField.value
-          )
-        );
-      } else {
-        onChange(value.concat([selectedField]));
-      }
-    }, []);
+    const handleOptionClick = useCallback(
+      (selectedField: Option) => {
+        const indexOfOption = value.findIndex(getIndexOfOption);
+        if (indexOfOption !== -1) {
+          onChange(
+            value.filter(
+              (val) =>
+                val.key !== selectedField.key &&
+                val.value !== selectedField.value
+            )
+          );
+        } else {
+          onChange(value.concat([selectedField]));
+        }
+      },
+      [value]
+    );
 
     return (
       <div className={classNames(styles["multi-dropdown"])}>
