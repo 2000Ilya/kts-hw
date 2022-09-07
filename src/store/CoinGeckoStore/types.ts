@@ -33,8 +33,10 @@ export type Coin = {
   id: string;
 };
 
-export interface ICoinGeckoStore {
-  getCoinsList(params: GetCoinsListParams): Promise<ApiResp<CoinItem[]>>;
+export interface ICoinsListStore {
+  getCoinsList(params: GetCoinsListParams): Promise<void>;
+}
 
-  getCoin(params: GetCoinParams): Promise<ApiResp<Coin>>;
+export interface ICoinInfoStore {
+  getCoin(params: GetCoinParams): Promise<void>;
 }
