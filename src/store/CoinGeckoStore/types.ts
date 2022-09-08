@@ -32,11 +32,10 @@ export type Coin = {
   symbol: string;
   id: string;
 };
-
 export interface ICoinsListStore {
-  getCoinsList(params: GetCoinsListParams): Promise<void>;
+  getCoinsList(params?: GetCoinsListParams): Promise<void>;
 }
 
 export interface ICoinInfoStore {
-  getCoin(params: GetCoinParams): Promise<void>;
+  getCoin(params?: GetCoinParams): Promise<void>;
 }

@@ -10,6 +10,7 @@ import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { createSearchParams, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import styles from "./ListCoinsPage.module.scss";
 
@@ -28,39 +29,33 @@ const ListCoinsPage: React.FC = () => {
   );
 
   useEffect(() => {
-    coinsListStore.getCoinsList({
-      queryParameters: {
-        vs_currency: "usd",
-        order: "market_cap_desc",
-        per_page: 10,
-        sparkline: false,
-      },
-    });
+    coinsListStore.getCoinsList();
   }, [coinsListStore]);
 
   return (
     <div className={classNames(styles["list-coins-page"])}>
-      <div className={classNames(styles["search-bar-container"])}>
-        <Input
-          placeholder={"Search Cryptocurrency"}
-          value={coinsListStore.inputValue}
-          onChange={handleSearchInputChange}
-        />
-        <Button>Search</Button>
+      <div className={classNames(styles["list-coins-page__head-group"])}>
+        <div className={classNames(styles["search-bar-container"])}>
+          <Input
+            placeholder={"Search Cryptocurrency"}
+            value={coinsListStore.inputValue}
+            onChange={handleSearchInputChange}
+          />
+          <Button>Search</Button>
+        </div>
+        <div className={classNames(styles["tabs-container"])}>
+          <Link to={"/coins"}>
+            <Button>All</Button>
+          </Link>
+          <Link to={"/coins?category=ethereum-ecosystem"}>
+            <Button>ETH-eco</Button>
+          </Link>
+        </div>
       </div>
       {coinsListStore.meta === Meta.sucsess ||
       coinsListStore.list.length > 0 ? (
         <List
-          loadMore={() =>
-            coinsListStore.fetchMoreCoins({
-              queryParameters: {
-                vs_currency: "usd",
-                order: "market_cap_desc",
-                per_page: 10,
-                sparkline: false,
-              },
-            })
-          }
+          loadMore={() => coinsListStore.getCoinsList()}
           list={coinsListStore.list}
         />
       ) : (

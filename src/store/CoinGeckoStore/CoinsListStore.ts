@@ -31,16 +31,22 @@ type PrivateFields = "_list" | "_meta" | "_pageNumber" | "_inputValue";
 
 export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   private readonly apiStore = new ApiStore(BASE_URL);
-
-  private _list: CollectionModel<string, CoinItemModel> = {
-    order: [],
-    entities: {},
+  private readonly defaultQueryParams = {
+    vs_currency: "usd",
+    order: "market_cap_desc",
+    per_page: 10,
+    sparkline: false,
   };
+
+  private _list: CollectionModel<string, CoinItemModel> =
+    getInitialCollectionModel();
   private _meta: Meta = Meta.initial;
   private _pageNumber: number = 1;
   private _inputValue: string;
 
   constructor(inputValue: string) {
+    // eslint-disable-next-line no-console
+    console.log("store");
     makeObservable<CoinsListStore, PrivateFields>(this, {
       _list: observable.ref,
       _meta: observable,
@@ -50,7 +56,6 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       meta: computed,
       nextPage: action,
       getCoinsList: action,
-      fetchMoreCoins: action,
       setInputValue: action,
     });
 
@@ -81,49 +86,17 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
     this._pageNumber = this.pageNumber + 1;
   }
 
-  async getCoinsList(params: GetCoinsListParams): Promise<void> {
-    this._meta = Meta.loading;
-    this._list = getInitialCollectionModel();
-
-    const response = await this.apiStore.request<CoinItemModel[]>({
-      headers: { Accept: "*/*" },
-      endpoint: "/coins/markets",
-      data: params.queryParameters,
-      method: HTTPMethod.GET,
-    });
-
-    this.nextPage();
-
-    runInAction(() => {
-      if (!response.success) {
-        this._meta = Meta.error;
-      }
-
-      try {
-        const list: CoinItemModel[] = [];
-        for (const item of response.data) {
-          list.push(normalizeCoinItem(item));
-        }
-
-        this._meta = Meta.sucsess;
-        this._list = normalizeCollection(list, (listItem) => listItem.id);
-        return;
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e);
-        this._meta = Meta.error;
-        this._list = getInitialCollectionModel();
-      }
-    });
-  }
-
-  async fetchMoreCoins(params: GetCoinsListParams): Promise<void> {
+  async getCoinsList(params?: GetCoinsListParams): Promise<void> {
     this._meta = Meta.loading;
 
     const response = await this.apiStore.request<CoinItemModel[]>({
       headers: { Accept: "*/*" },
       endpoint: "/coins/markets",
-      data: { ...params.queryParameters, page: this.pageNumber },
+      data: {
+        ...this.defaultQueryParams,
+        ...params?.queryParameters,
+        page: this.pageNumber,
+      },
       method: HTTPMethod.GET,
     });
 
@@ -163,7 +136,15 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   }
 
   private readonly _qPReaction: IReactionDisposer = reaction(
-    () => rootStore.query.getParam("search"),
-    (search) => {}
+    () => rootStore.query.getParam("category"),
+    (category) => {
+      if (Boolean(category)) {
+        this.getCoinsList({
+          queryParameters: {
+            category,
+          },
+        });
+      }
+    }
   );
 }
