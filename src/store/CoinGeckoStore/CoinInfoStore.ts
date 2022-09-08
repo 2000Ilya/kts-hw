@@ -2,7 +2,13 @@ import ApiStore from "@store/ApiStore";
 import { HTTPMethod } from "@store/ApiStore/types";
 import { Meta } from "@utils/meta";
 import { ILocalStore } from "@utils/useLocalStore";
-import { computed, makeObservable, observable, runInAction } from "mobx";
+import {
+  action,
+  computed,
+  makeObservable,
+  observable,
+  runInAction,
+} from "mobx";
 
 import { Coin, GetCoinParams, ICoinInfoStore } from "./types";
 
@@ -22,6 +28,7 @@ export default class CoinInfoStore implements ICoinInfoStore, ILocalStore {
       _meta: observable,
       coin: computed,
       meta: computed,
+      getCoin: action,
     });
   }
 
@@ -56,7 +63,7 @@ export default class CoinInfoStore implements ICoinInfoStore, ILocalStore {
   }
 
   destroy(): void {
-    // eslint-disable-next-line no-console
-    console.log();
+    this._coin = null;
+    this._meta = Meta.initial;
   }
 }
