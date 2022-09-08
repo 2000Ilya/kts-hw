@@ -38,9 +38,8 @@ const List = ({ list, loadMore }: ListProps) => {
         scrollableTarget={"coins-list"}
       >
         {list.map((coinItem) => (
-          <Link to={`/coins/${coinItem.id}`}>
+          <Link to={`/coins/${coinItem.id}`} key={coinItem.id}>
             <Card
-              key={coinItem.id}
               image={coinItem.image}
               title={coinItem.name}
               subtitle={coinItem.symbol}
