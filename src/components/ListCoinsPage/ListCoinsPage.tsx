@@ -8,21 +8,21 @@ import CoinsListStore from "@store/CoinGeckoStore/CoinsListStore";
 import { Meta } from "@utils/meta";
 import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
+import { observer } from "mobx-react-lite";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 
 import styles from "./ListCoinsPage.module.scss";
 
-const ListCoinsPage: React.FC = React.memo(() => {
+const ListCoinsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [inputValue, setInputValue] = useState<string>(
-    searchParams.get("search") || ""
+  const coinsListStore = useLocalStore(
+    () => new CoinsListStore(searchParams.get("search") || "")
   );
-  const coinsListStore = useLocalStore(() => new CoinsListStore());
 
   const handleSearchInputChange = useCallback(
     (text: string): void => {
-      setSearchParams(createSearchParams({ search: text }));
-      setInputValue(text);
+      setSearchParams(text ? createSearchParams({ search: text }) : "");
+      coinsListStore.setInputValue(text);
     },
     [searchParams]
   );
@@ -43,12 +43,13 @@ const ListCoinsPage: React.FC = React.memo(() => {
       <div className={classNames(styles["search-bar-container"])}>
         <Input
           placeholder={"Search Cryptocurrency"}
-          value={inputValue}
+          value={coinsListStore.inputValue}
           onChange={handleSearchInputChange}
         />
         <Button>Search</Button>
       </div>
-      {coinsListStore.meta === Meta.sucsess ? (
+      {coinsListStore.meta === Meta.sucsess ||
+      coinsListStore.list.length > 0 ? (
         <List
           loadMore={() =>
             coinsListStore.fetchMoreCoins({
@@ -74,6 +75,6 @@ const ListCoinsPage: React.FC = React.memo(() => {
       )}
     </div>
   );
-});
+};
 
-export default ListCoinsPage;
+export default observer(ListCoinsPage);
