@@ -11,12 +11,20 @@
     height: 4rem;
   }
 
-  .search-bar-container {
+  &__head-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 5.8rem auto 3.4rem 1.6rem;
+  }
+
+  .search-bar-container,
+  .tabs-container {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: flex-start;
     gap: 1.5rem;
-    margin: 5.8rem auto 3.4rem 1.6rem;
   }
 }
 
