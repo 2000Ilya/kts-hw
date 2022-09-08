@@ -6,6 +6,14 @@ export type GetCoinParams = {
   coinName: string | undefined;
   queryParameters: {};
 };
+export type ApiReqData = {
+  page: number;
+  vs_currency: string;
+  order: string;
+  per_page: number;
+  sparkline: boolean;
+  category?: string;
+};
 
 export type ApiResp<dataT> = {
   data: dataT;

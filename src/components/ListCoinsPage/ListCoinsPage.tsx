@@ -4,21 +4,23 @@ import { Button } from "@components/Button";
 import Input from "@components/Input";
 import List from "@components/List/List";
 import { Loader } from "@components/Loader";
-import { MultiDropdown } from "@components/MultiDropdown";
 import CoinsListStore from "@store/CoinGeckoStore/CoinsListStore";
 import { Meta } from "@utils/meta";
 import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { createSearchParams, useSearchParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 import styles from "./ListCoinsPage.module.scss";
 
 const ListCoinsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const coinsListStore = useLocalStore(
-    () => new CoinsListStore(searchParams.get("search") || "")
+    () =>
+      new CoinsListStore(
+        searchParams.get("search") || "",
+        searchParams.get("category") || ""
+      )
   );
 
   const handleSearchInputChange = useCallback(
@@ -70,8 +72,10 @@ const ListCoinsPage: React.FC = () => {
   );
 
   useEffect(() => {
-    coinsListStore.getCoinsList();
-  }, [coinsListStore]);
+    return () => {
+      coinsListStore.destroy();
+    };
+  }, []);
 
   return (
     <div className={classNames(styles["list-coins-page"])}>
