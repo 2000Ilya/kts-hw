@@ -27,7 +27,7 @@ import { GetCoinsListParams, ICoinsListStore } from "./types";
 
 const BASE_URL = "https://api.coingecko.com/api/v3";
 
-type PrivateFields = "_list" | "_meta" | "_pageNumber";
+type PrivateFields = "_list" | "_meta" | "_pageNumber" | "_inputValue";
 
 export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   private readonly apiStore = new ApiStore(BASE_URL);
@@ -38,16 +38,23 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   };
   private _meta: Meta = Meta.initial;
   private _pageNumber: number = 1;
+  private _inputValue: string;
 
-  constructor() {
+  constructor(inputValue: string) {
     makeObservable<CoinsListStore, PrivateFields>(this, {
       _list: observable.ref,
       _meta: observable,
       _pageNumber: observable,
+      _inputValue: observable,
       list: computed,
       meta: computed,
       nextPage: action,
+      getCoinsList: action,
+      fetchMoreCoins: action,
+      setInputValue: action,
     });
+
+    this._inputValue = inputValue;
   }
 
   get list(): CoinItemModel[] {
@@ -60,6 +67,14 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
 
   get pageNumber(): number {
     return this._pageNumber;
+  }
+
+  get inputValue(): string {
+    return this._inputValue;
+  }
+
+  setInputValue(inputValue: string) {
+    this._inputValue = inputValue;
   }
 
   nextPage() {
@@ -76,6 +91,8 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       data: params.queryParameters,
       method: HTTPMethod.GET,
     });
+
+    this.nextPage();
 
     runInAction(() => {
       if (!response.success) {
@@ -110,6 +127,8 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       method: HTTPMethod.GET,
     });
 
+    this.nextPage();
+
     runInAction(() => {
       if (!response.success) {
         this._meta = Meta.error;
@@ -134,14 +153,17 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   }
 
   destroy(): void {
+    this._list = {
+      order: [],
+      entities: {},
+    };
+    this._meta = Meta.initial;
+    this._pageNumber = 1;
     this._qPReaction();
   }
 
   private readonly _qPReaction: IReactionDisposer = reaction(
     () => rootStore.query.getParam("search"),
-    (search) => {
-      // eslint-disable-next-line no-console
-      console.log(search);
-    }
+    (search) => {}
   );
 }
