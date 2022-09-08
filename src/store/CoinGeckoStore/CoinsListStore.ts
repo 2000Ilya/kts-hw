@@ -27,7 +27,12 @@ import { GetCoinsListParams, ICoinsListStore } from "./types";
 
 const BASE_URL = "https://api.coingecko.com/api/v3";
 
-type PrivateFields = "_list" | "_meta" | "_pageNumber" | "_inputValue";
+type PrivateFields =
+  | "_list"
+  | "_meta"
+  | "_pageNumber"
+  | "_inputValue"
+  | "_category";
 
 export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   private readonly apiStore = new ApiStore(BASE_URL);
@@ -43,20 +48,21 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   private _meta: Meta = Meta.initial;
   private _pageNumber: number = 1;
   private _inputValue: string;
+  private _category: string = "";
 
   constructor(inputValue: string) {
-    // eslint-disable-next-line no-console
-    console.log("store");
     makeObservable<CoinsListStore, PrivateFields>(this, {
       _list: observable.ref,
       _meta: observable,
       _pageNumber: observable,
       _inputValue: observable,
+      _category: observable,
       list: computed,
       meta: computed,
       nextPage: action,
       getCoinsList: action,
       setInputValue: action,
+      setCategory: action,
     });
 
     this._inputValue = inputValue;
@@ -80,6 +86,10 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
 
   setInputValue(inputValue: string) {
     this._inputValue = inputValue;
+  }
+
+  setCategory(category: string) {
+    this._category = category;
   }
 
   nextPage() {
@@ -136,15 +146,14 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   }
 
   private readonly _qPReaction: IReactionDisposer = reaction(
-    () => rootStore.query.getParam("category"),
-    (category) => {
-      if (Boolean(category)) {
-        this.getCoinsList({
-          queryParameters: {
-            category,
-          },
-        });
-      }
+    () => {
+      const search = rootStore.query.getParam("search");
+      const category = rootStore.query.getParam("category");
+      return [search, category];
+    },
+    ([search, category]) => {
+      // eslint-disable-next-line no-console
+      console.log(search, category);
     }
   );
 }

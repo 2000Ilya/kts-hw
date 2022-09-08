@@ -4,6 +4,7 @@ import { Button } from "@components/Button";
 import Input from "@components/Input";
 import List from "@components/List/List";
 import { Loader } from "@components/Loader";
+import { MultiDropdown } from "@components/MultiDropdown";
 import CoinsListStore from "@store/CoinGeckoStore/CoinsListStore";
 import { Meta } from "@utils/meta";
 import { useLocalStore } from "@utils/useLocalStore";
@@ -22,8 +23,48 @@ const ListCoinsPage: React.FC = () => {
 
   const handleSearchInputChange = useCallback(
     (text: string): void => {
-      setSearchParams(text ? createSearchParams({ search: text }) : "");
+      let newParams = {};
+      const category = searchParams.get("category");
+      if (category || text) {
+        const newSearchParams = text
+          ? {
+              search: text,
+            }
+          : {};
+        const newCategoryParams = category
+          ? {
+              category,
+            }
+          : {};
+        newParams = { ...newCategoryParams, ...newSearchParams };
+      }
+
+      setSearchParams(createSearchParams(newParams));
       coinsListStore.setInputValue(text);
+    },
+    [searchParams]
+  );
+
+  const handleTabsSelect = useCallback(
+    (category: string): void => {
+      let newParams = {};
+      const search = searchParams.get("search");
+      if (category || search) {
+        const newSearchParams = search
+          ? {
+              search,
+            }
+          : {};
+        const newCategoryParams = category
+          ? {
+              category,
+            }
+          : {};
+        newParams = { ...newCategoryParams, ...newSearchParams };
+      }
+
+      setSearchParams(createSearchParams(newParams));
+      coinsListStore.setCategory(category);
     },
     [searchParams]
   );
@@ -44,12 +85,20 @@ const ListCoinsPage: React.FC = () => {
           <Button>Search</Button>
         </div>
         <div className={classNames(styles["tabs-container"])}>
-          <Link to={"/coins"}>
-            <Button>All</Button>
-          </Link>
-          <Link to={"/coins?category=ethereum-ecosystem"}>
-            <Button>ETH-eco</Button>
-          </Link>
+          <Button
+            onClick={() => {
+              handleTabsSelect("");
+            }}
+          >
+            All
+          </Button>
+          <Button
+            onClick={() => {
+              handleTabsSelect("ethereum-ecosystem");
+            }}
+          >
+            ETH-eco
+          </Button>
         </div>
       </div>
       {coinsListStore.meta === Meta.sucsess ||
