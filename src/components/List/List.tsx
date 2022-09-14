@@ -1,8 +1,8 @@
 import React from "react";
 
-import Card from "components/Card";
-import { Loader, LoaderSize } from "components/Loader";
-import roundNumber from "utils/roundNumber";
+import Card from "@components/Card";
+import { Loader, LoaderSize } from "@components/Loader";
+import roundNumber from "@utils/roundNumber";
 import classNames from "classnames";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";

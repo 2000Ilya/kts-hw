@@ -2,14 +2,14 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "components": [
-        "components"
+      "@components/*": [
+        "components/*"
       ],
-      "utils": [
-        "utils"
+      "@store/*": [
+        "store/*"
       ],
-      "store": [
-        "store"
+      "@utils/*": [
+        "utils/*"
       ]
     },
     "noEmit": true,
@@ -21,12 +21,12 @@
     "module": "es6",
     "target": "es6",
     "moduleResolution": "node",
-    "jsx": "react-jsx",
+    "jsx": "react",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"

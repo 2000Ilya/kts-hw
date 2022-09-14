@@ -78,9 +78,9 @@ module.exports = {
   resolve: {
     extensions: [".jsx", ".js", ".tsx", ".ts"],
     alias: {
-      components: path.join(srcPath, "components"),
-      store: path.join(srcPath, "store"),
-      utils: path.join(srcPath, "utils"),
+      ["@components"]: path.join(srcPath, "components"),
+      ["@store"]: path.join(srcPath, "store"),
+      ["@utils"]: path.join(srcPath, "utils"),
     },
   },
   devServer: {

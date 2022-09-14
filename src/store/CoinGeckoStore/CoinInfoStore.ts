@@ -1,7 +1,7 @@
-import ApiStore from "store/ApiStore";
-import { HTTPMethod } from "store/ApiStore/types";
-import { Meta } from "utils/meta";
-import { ILocalStore } from "utils/useLocalStore";
+import ApiStore from "@store/ApiStore";
+import { HTTPMethod } from "@store/ApiStore/types";
+import { Meta } from "@utils/meta";
+import { ILocalStore } from "@utils/useLocalStore";
 import {
   action,
   computed,

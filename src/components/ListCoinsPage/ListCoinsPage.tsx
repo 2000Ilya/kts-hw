@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { Button } from "components/Button";
-import Input from "components/Input";
-import List from "components/List/List";
-import { Loader } from "components/Loader";
-import CoinsListStore from "store/CoinGeckoStore/CoinsListStore";
-import { Meta } from "utils/meta";
-import { useLocalStore } from "utils/useLocalStore";
+import { Button } from "@components/Button";
+import Input from "@components/Input";
+import List from "@components/List/List";
+import { Loader } from "@components/Loader";
+import CoinsListStore from "@store/CoinGeckoStore/CoinsListStore";
+import { Meta } from "@utils/meta";
+import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { createSearchParams, useSearchParams } from "react-router-dom";

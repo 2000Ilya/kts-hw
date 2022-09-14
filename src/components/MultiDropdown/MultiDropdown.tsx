@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 
-import ArrowDownIcon from "components/ArrowDownIcon";
-import ArrowUpIcon from "components/ArrowUpIcon";
+import ArrowDownIcon from "@components/ArrowDownIcon";
+import ArrowUpIcon from "@components/ArrowUpIcon";
 import classNames from "classnames";
 
 import styles from "./MultiDropdown.module.scss";
