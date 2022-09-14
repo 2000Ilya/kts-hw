@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
-import ArrowLeftIcon from "@components/ArrowLeftIcon";
-import { Loader, LoaderSize } from "@components/Loader";
-import CoinInfoStore from "@store/CoinGeckoStore/CoinInfoStore";
-import { Meta } from "@utils/meta";
-import roundNumber from "@utils/roundNumber";
-import { useLocalStore } from "@utils/useLocalStore";
+import ArrowLeftIcon from "components/ArrowLeftIcon";
+import { Loader, LoaderSize } from "components/Loader";
+import CoinInfoStore from "store/CoinGeckoStore/CoinInfoStore";
+import { Meta } from "utils/meta";
+import roundNumber from "utils/roundNumber";
+import { useLocalStore } from "utils/useLocalStore";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
