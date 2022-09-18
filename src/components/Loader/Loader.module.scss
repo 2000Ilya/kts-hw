@@ -1,0 +1,37 @@
+@import "../../variables.scss";
+
+.loader {
+  background: $white;
+  border-radius: 100%;
+  animation: spin-anim 1.2s linear infinite;
+  border-style: solid;
+  border-color: $dark-grey $dark-grey $dark-grey transparent;
+  box-sizing: border-box;
+
+  &_size-l {
+    height: 6rem;
+    width: 6rem;
+    border-width: 0.6rem;
+  }
+
+  &_size-m {
+    height: 4rem;
+    width: 4rem;
+    border-width: 0.45rem;
+  }
+
+  &_size-s {
+    height: 2rem;
+    width: 2rem;
+    border-width: 0.3rem;
+  }
+}
+
+@keyframes spin-anim {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
