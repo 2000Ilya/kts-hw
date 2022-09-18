@@ -10,9 +10,13 @@ import { CoinItemModel } from "src/models/shared/coinGecko/coinItem";
 
 import styles from "./List.module.scss";
 
-type ListProps = { list: CoinItemModel[]; loadMore: () => Promise<void> };
+type ListProps = {
+  list: CoinItemModel[];
+  loadMore: () => Promise<void> | void;
+  hasMore: boolean;
+};
 
-const List = ({ list, loadMore }: ListProps) => {
+const List = ({ list, loadMore, hasMore }: ListProps) => {
   return (
     <div
       className={classNames(styles["coins-list-container"])}
@@ -21,7 +25,7 @@ const List = ({ list, loadMore }: ListProps) => {
       <InfiniteScroll
         dataLength={list.length}
         next={loadMore}
-        hasMore={true}
+        hasMore={hasMore}
         style={{
           overflow: "hidden",
         }}
@@ -43,10 +47,16 @@ const List = ({ list, loadMore }: ListProps) => {
               image={coinItem.image}
               title={coinItem.name}
               subtitle={coinItem.symbol}
-              currentPrice={`${roundNumber(coinItem.currentPrice)}`}
-              priceChangePercentage={`${roundNumber(
-                coinItem.priceChangePercentage24h
-              )}%`}
+              currentPrice={
+                coinItem.currentPrice !== null
+                  ? `${roundNumber(coinItem.currentPrice)}`
+                  : null
+              }
+              priceChangePercentage={
+                coinItem.priceChangePercentage24h !== null
+                  ? `${roundNumber(coinItem.priceChangePercentage24h)}%`
+                  : null
+              }
             />
           </Link>
         ))}
