@@ -53,7 +53,7 @@ export default class CoinInfoStore implements ICoinInfoStore, ILocalStore {
 
     runInAction(() => {
       if (response.success) {
-        this._meta = Meta.sucsess;
+        this._meta = Meta.success;
         this._coin = response.data;
         return;
       }

@@ -78,7 +78,11 @@ const ListCoinsPage: React.FC = () => {
   return (
     <div className={classNames(styles["list-coins-page"])}>
       <div className={classNames(styles["list-coins-page__head-group"])}>
-        <div className={classNames(styles["search-bar-container"])}>
+        <div
+          className={classNames(
+            styles["list-coins-page__search-bar-container"]
+          )}
+        >
           <Input
             placeholder={"Search Cryptocurrency"}
             value={coinsListStore.searchValue}
@@ -86,7 +90,7 @@ const ListCoinsPage: React.FC = () => {
           />
           <Button>Search</Button>
         </div>
-        <div className={classNames(styles["tabs-container"])}>
+        <div className={classNames(styles["list-coins-page__tabs-container"])}>
           <Button
             onClick={() => {
               handleTabsSelect("");
@@ -103,7 +107,7 @@ const ListCoinsPage: React.FC = () => {
           </Button>
         </div>
       </div>
-      {coinsListStore.meta === Meta.sucsess ||
+      {coinsListStore.meta === Meta.success ||
       coinsListStore.list.length > 0 ? (
         <List
           hasMore={!isCoinsSearching}
