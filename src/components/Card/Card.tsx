@@ -8,8 +8,8 @@ type CardProps = {
   image: string;
   title: React.ReactNode;
   subtitle: React.ReactNode;
-  currentPrice: string;
-  priceChangePercentage: string;
+  currentPrice: string | null;
+  priceChangePercentage: string | null;
   content?: React.ReactNode;
   onClick?: React.MouseEventHandler;
 };
@@ -35,14 +35,16 @@ const Card = ({
         </div>
       </div>
       {content}
-      <div className={classNames(styles["card__value-container"])}>
-        <h1 className={classNames(styles["card-header"], styles.card__value)}>
-          {"$" + currentPrice}
-        </h1>
-        <h4 className={classNames(styles["card__value-diff"])}>
-          {priceChangePercentage}
-        </h4>
-      </div>
+      {currentPrice !== null && priceChangePercentage !== null && (
+        <div className={classNames(styles["card__value-container"])}>
+          <h1 className={classNames(styles["card-header"], styles.card__value)}>
+            {"$" + currentPrice}
+          </h1>
+          <h4 className={classNames(styles["card__value-diff"])}>
+            {priceChangePercentage}
+          </h4>
+        </div>
+      )}
     </div>
   );
 };

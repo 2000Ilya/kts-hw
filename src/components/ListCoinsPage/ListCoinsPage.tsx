@@ -26,19 +26,13 @@ const ListCoinsPage: React.FC = () => {
   const handleSearchInputChange = useCallback(
     (text: string): void => {
       let newParams = {};
-      const category = searchParams.get("category");
-      if (category || text) {
+      if (text) {
         const newSearchParams = text
           ? {
               search: text,
             }
           : {};
-        const newCategoryParams = category
-          ? {
-              category,
-            }
-          : {};
-        newParams = { ...newCategoryParams, ...newSearchParams };
+        newParams = { ...newSearchParams };
       }
 
       setSearchParams(createSearchParams(newParams));
@@ -50,19 +44,13 @@ const ListCoinsPage: React.FC = () => {
   const handleTabsSelect = useCallback(
     (category: string): void => {
       let newParams = {};
-      const search = searchParams.get("search");
-      if (category || search) {
-        const newSearchParams = search
-          ? {
-              search,
-            }
-          : {};
+      if (category) {
         const newCategoryParams = category
           ? {
               category,
             }
           : {};
-        newParams = { ...newCategoryParams, ...newSearchParams };
+        newParams = { ...newCategoryParams };
       }
 
       setSearchParams(createSearchParams(newParams));
@@ -70,6 +58,16 @@ const ListCoinsPage: React.FC = () => {
     },
     [searchParams]
   );
+
+  const isCoinsSearching = coinsListStore.searchValue.length > 0;
+
+  const loadMoreCoins = () => {
+    if (!isCoinsSearching) {
+      coinsListStore.getCoinsList();
+    } else {
+      return;
+    }
+  };
 
   useEffect(() => {
     return () => {
@@ -83,7 +81,7 @@ const ListCoinsPage: React.FC = () => {
         <div className={classNames(styles["search-bar-container"])}>
           <Input
             placeholder={"Search Cryptocurrency"}
-            value={coinsListStore.inputValue}
+            value={coinsListStore.searchValue}
             onChange={handleSearchInputChange}
           />
           <Button>Search</Button>
@@ -108,7 +106,8 @@ const ListCoinsPage: React.FC = () => {
       {coinsListStore.meta === Meta.sucsess ||
       coinsListStore.list.length > 0 ? (
         <List
-          loadMore={() => coinsListStore.getCoinsList()}
+          hasMore={!isCoinsSearching}
+          loadMore={loadMoreCoins}
           list={coinsListStore.list}
         />
       ) : (

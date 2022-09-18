@@ -16,6 +16,7 @@ import {
 import {
   CoinItemModel,
   normalizeCoinItem,
+  normalizeCoinItemSearched,
 } from "../../models/shared/coinGecko/coinItem";
 import {
   CollectionModel,
@@ -23,7 +24,12 @@ import {
   linearizeCollection,
   normalizeCollection,
 } from "../../models/shared/collection";
-import { ApiReqData, GetCoinsListParams, ICoinsListStore } from "./types";
+import {
+  ApiReqCoinsListBySearchData,
+  ApiReqCoinsListData,
+  GetCoinsListParams,
+  ICoinsListStore,
+} from "./types";
 
 const BASE_URL = "https://api.coingecko.com/api/v3";
 
@@ -31,7 +37,7 @@ type PrivateFields =
   | "_list"
   | "_meta"
   | "_pageNumber"
-  | "_inputValue"
+  | "_searchValue"
   | "_category";
 
 export default class CoinsListStore implements ICoinsListStore, ILocalStore {
@@ -47,7 +53,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
     getInitialCollectionModel();
   private _meta: Meta = Meta.initial;
   private _pageNumber: number = 1;
-  private _inputValue: string;
+  private _searchValue: string;
   private _category: string;
 
   constructor(inputValue: string, category: string) {
@@ -55,7 +61,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       _list: observable.ref,
       _meta: observable,
       _pageNumber: observable,
-      _inputValue: observable,
+      _searchValue: observable,
       _category: observable,
       list: computed,
       meta: computed,
@@ -63,9 +69,10 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       getCoinsList: action,
       setInputValue: action,
       setCategory: action,
+      clearCoins: action,
     });
 
-    this._inputValue = inputValue;
+    this._searchValue = inputValue;
     this._category = category;
     this.getCoinsList();
   }
@@ -82,8 +89,8 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
     return this._pageNumber;
   }
 
-  get inputValue(): string {
-    return this._inputValue;
+  get searchValue(): string {
+    return this._searchValue;
   }
 
   get category(): string {
@@ -91,14 +98,17 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   }
 
   setInputValue(inputValue: string) {
-    this._inputValue = inputValue;
+    if (inputValue !== this.searchValue) {
+      this._searchValue = inputValue;
+      this.clearCoins();
+      this.getCoinsList();
+    }
   }
 
   setCategory(category: string) {
     if (category !== this.category) {
       this._category = category;
-      this._pageNumber = 1;
-      this._list = getInitialCollectionModel();
+      this.clearCoins();
       this.getCoinsList();
     }
   }
@@ -107,21 +117,35 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
     this._pageNumber = this.pageNumber + 1;
   }
 
+  clearCoins() {
+    this._pageNumber = 1;
+    this._list = getInitialCollectionModel();
+  }
+
   async getCoinsList(params?: GetCoinsListParams): Promise<void> {
     this._meta = Meta.loading;
-    let data: ApiReqData = {
-      ...this.defaultQueryParams,
-      ...params?.queryParameters,
-      page: this.pageNumber,
-    };
-
-    if (this.category) {
-      data.category = this.category;
+    let data: ApiReqCoinsListData | ApiReqCoinsListBySearchData;
+    let endpoint: string;
+    if (this.searchValue === "") {
+      data = {
+        ...this.defaultQueryParams,
+        ...params?.queryParameters,
+        page: this.pageNumber,
+      };
+      if (this.category) {
+        data.category = this.category;
+      }
+      endpoint = "/coins/markets";
+    } else {
+      data = {
+        query: this.searchValue,
+      };
+      endpoint = "/search";
     }
 
     const response = await this.apiStore.request<CoinItemModel[]>({
       headers: { Accept: "*/*" },
-      endpoint: "/coins/markets",
+      endpoint,
       data,
       method: HTTPMethod.GET,
     });
@@ -135,8 +159,18 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
 
       try {
         const list: CoinItemModel[] = this.list;
-        for (const item of response.data) {
-          list.push(normalizeCoinItem(item));
+        let responseData;
+        if (this.searchValue === "") {
+          responseData = response.data;
+        } else {
+          responseData = response.data.coins;
+        }
+        for (const item of responseData) {
+          if (this.searchValue === "") {
+            list.push(normalizeCoinItem(item));
+          } else {
+            list.push(normalizeCoinItemSearched(item));
+          }
         }
 
         this._meta = Meta.sucsess;
@@ -155,18 +189,29 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
     this._list = getInitialCollectionModel();
     this._meta = Meta.initial;
     this._pageNumber = 1;
-    this._qPReaction();
+    this._qPCategoryReaction();
+    this._qPSearchReaction();
   }
 
-  private readonly _qPReaction: IReactionDisposer = reaction(
+  private readonly _qPCategoryReaction: IReactionDisposer = reaction(
     () => {
-      const search = rootStore.query.getParam("search");
-      const category = rootStore.query.getParam("category");
-      return [search, category];
+      return rootStore.query.getParam("category");
     },
-    ([search, category]) => {
+    (category) => {
       if (category !== undefined && typeof category === "string") {
         this._category = category;
+      }
+    }
+  );
+
+  private readonly _qPSearchReaction: IReactionDisposer = reaction(
+    () => {
+      const search = rootStore.query.getParam("search");
+      return search;
+    },
+    (search) => {
+      if (search !== undefined && typeof search === "string") {
+        this._searchValue = search;
       }
     }
   );
