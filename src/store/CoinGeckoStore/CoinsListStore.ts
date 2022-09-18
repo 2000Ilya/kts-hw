@@ -65,7 +65,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       _category: observable,
       list: computed,
       meta: computed,
-      nextPage: action,
+      addPage: action,
       getCoinsList: action,
       setInputValue: action,
       setCategory: action,
@@ -113,7 +113,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
     }
   }
 
-  nextPage() {
+  addPage() {
     this._pageNumber = this.pageNumber + 1;
   }
 
@@ -150,7 +150,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       method: HTTPMethod.GET,
     });
 
-    this.nextPage();
+    this.addPage();
 
     runInAction(() => {
       if (!response.success) {
@@ -173,7 +173,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
           }
         }
 
-        this._meta = Meta.sucsess;
+        this._meta = Meta.success;
         this._list = normalizeCollection(list, (listItem) => listItem.id);
         return;
       } catch (e) {
