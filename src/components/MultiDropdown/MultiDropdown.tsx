@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import ArrowDownIcon from "@components/ArrowDownIcon";
 import ArrowUpIcon from "@components/ArrowUpIcon";
@@ -29,34 +29,37 @@ export const MultiDropdown = React.memo(
   }: MultiDropdownProps) => {
     const [isOptionsShowing, setOptionsShowing] = useState(false);
 
-    const getIndexOfOption = (value: Option[], option: Option) => {
-      if (value !== undefined) {
-        for (let i = 0; i < value.length; i++) {
-          if (value[i].key === option.key) {
-            return i;
-          }
+    const getIndexOfOption = useCallback(
+      (option: Option, index: number) => {
+        if (option !== undefined) {
+          return value[index].key === option.key;
         }
-      }
-      return -1;
-    };
+        return false;
+      },
+      [value]
+    );
 
-    const toggleOptionsShowing = () => {
+    const toggleOptionsShowing = useCallback(() => {
       setOptionsShowing((isOptionsShowing) => !isOptionsShowing);
-    };
+    }, [isOptionsShowing]);
 
-    const handleOptionClick = (selectedField: Option) => {
-      const indexOfOption = getIndexOfOption(value, selectedField);
-      if (indexOfOption !== -1) {
-        onChange(
-          value.filter(
-            (val) =>
-              val.key !== selectedField.key && val.value !== selectedField.value
-          )
-        );
-      } else {
-        onChange(value.concat([selectedField]));
-      }
-    };
+    const handleOptionClick = useCallback(
+      (selectedField: Option) => {
+        const indexOfOption = value.findIndex(getIndexOfOption);
+        if (indexOfOption !== -1) {
+          onChange(
+            value.filter(
+              (val) =>
+                val.key !== selectedField.key &&
+                val.value !== selectedField.value
+            )
+          );
+        } else {
+          onChange(value.concat([selectedField]));
+        }
+      },
+      [value]
+    );
 
     return (
       <div className={classNames(styles["multi-dropdown"])}>

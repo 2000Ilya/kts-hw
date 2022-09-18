@@ -7,6 +7,19 @@ export type GetCoinParams = {
   queryParameters: {};
 };
 
+export type ApiReqCoinsListData = {
+  page: number;
+  vs_currency: string;
+  order: string;
+  per_page: number;
+  sparkline: boolean;
+  category?: string;
+};
+
+export type ApiReqCoinsListBySearchData = {
+  query: string;
+};
+
 export type ApiResp<dataT> = {
   data: dataT;
   success: boolean;
@@ -32,9 +45,10 @@ export type Coin = {
   symbol: string;
   id: string;
 };
+export interface ICoinsListStore {
+  getCoinsList(params?: GetCoinsListParams): Promise<void>;
+}
 
-export interface ICoinGeckoStore {
-  getCoinsList(params: GetCoinsListParams): Promise<ApiResp<CoinItem[]>>;
-
-  getCoin(params: GetCoinParams): Promise<ApiResp<Coin>>;
+export interface ICoinInfoStore {
+  getCoin(params?: GetCoinParams): Promise<void>;
 }

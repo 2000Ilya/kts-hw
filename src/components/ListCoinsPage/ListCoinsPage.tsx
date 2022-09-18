@@ -1,107 +1,119 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@components/Button";
-import Card from "@components/Card";
 import Input from "@components/Input";
-import { Loader, LoaderSize } from "@components/Loader";
-import { CoinItem } from "@store/CoinGeckoStore/types";
-import coinGeckoStore from "@store/coinGeckoStoreInstance";
-import roundNumber from "@utils/roundNumber";
+import List from "@components/List/List";
+import { Loader } from "@components/Loader";
+import CoinsListStore from "@store/CoinGeckoStore/CoinsListStore";
+import { Meta } from "@utils/meta";
+import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Link } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { createSearchParams, useSearchParams } from "react-router-dom";
 
 import styles from "./ListCoinsPage.module.scss";
 
 const ListCoinsPage: React.FC = () => {
-  const [inputValue, setInputValue] = useState<string>("");
-  const [coinsList, setCoinsList] = useState<CoinItem[]>([]);
-  const [page, setPage] = useState<number>(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const coinsListStore = useLocalStore(
+    () =>
+      new CoinsListStore(
+        searchParams.get("search") || "",
+        searchParams.get("category") || ""
+      )
+  );
 
-  const setNextPage = () => {
-    setPage((pageNumber) => pageNumber + 1);
-  };
+  const handleSearchInputChange = useCallback(
+    (text: string): void => {
+      let newParams = {};
+      if (text) {
+        const newSearchParams = text
+          ? {
+              search: text,
+            }
+          : {};
+        newParams = { ...newSearchParams };
+      }
 
-  const fetchCoinsData = async () => {
-    return await coinGeckoStore.getCoinsList({
-      queryParameters: {
-        vs_currency: "usd",
-        order: "market_cap_desc",
-        per_page: 10,
-        page,
-        sparkline: false,
-      },
-    });
+      setSearchParams(createSearchParams(newParams));
+      coinsListStore.setInputValue(text);
+    },
+    [searchParams]
+  );
+
+  const handleTabsSelect = useCallback(
+    (category: string): void => {
+      let newParams = {};
+      if (category) {
+        const newCategoryParams = category
+          ? {
+              category,
+            }
+          : {};
+        newParams = { ...newCategoryParams };
+      }
+
+      setSearchParams(createSearchParams(newParams));
+      coinsListStore.setCategory(category);
+    },
+    [searchParams]
+  );
+
+  const isCoinsSearching = coinsListStore.searchValue.length > 0;
+
+  const loadMoreCoins = () => {
+    if (!isCoinsSearching) {
+      coinsListStore.getCoinsList();
+    } else {
+      return;
+    }
   };
 
   useEffect(() => {
-    const firstDataFetch = async () => {
-      const coinsData = await fetchCoinsData();
-      setCoinsList(coinsData.success ? coinsData.data : []);
-      setNextPage();
-    };
-
-    firstDataFetch();
-
     return () => {
-      setCoinsList([]);
+      coinsListStore.destroy();
     };
   }, []);
 
-  const fetchMoreCoins = async () => {
-    const coinsData = await fetchCoinsData();
-    const nextCoins = coinsData.success ? coinsData.data : [];
-    setCoinsList((coins) => coins.concat(nextCoins));
-    setNextPage();
-  };
-
   return (
     <div className={classNames(styles["list-coins-page"])}>
-      <div className={classNames(styles["search-bar-container"])}>
-        <Input
-          placeholder={"Search Cryptocurrency"}
-          value={inputValue}
-          onChange={setInputValue}
-        />
-        <Button>Search</Button>
-      </div>
-      {coinsList.length > 0 ? (
+      <div className={classNames(styles["list-coins-page__head-group"])}>
         <div
-          className={classNames(styles["coins-list-container"])}
-          id={"coins-list"}
+          className={classNames(
+            styles["list-coins-page__search-bar-container"]
+          )}
         >
-          <InfiniteScroll
-            dataLength={coinsList.length}
-            next={fetchMoreCoins}
-            hasMore={true}
-            loader={
-              <div
-                className={classNames(
-                  styles["flex-align-center"],
-                  styles["list-coins-page__loader-container"]
-                )}
-              >
-                <Loader size={LoaderSize.s} />
-              </div>
-            }
-            scrollableTarget={"coins-list"}
-          >
-            {coinsList.map((coinItem) => (
-              <Link to={`/coins/${coinItem.id}`}>
-                <Card
-                  key={coinItem.id}
-                  image={coinItem.image}
-                  title={coinItem.name}
-                  subtitle={coinItem.symbol}
-                  currentPrice={`${roundNumber(coinItem.current_price)}`}
-                  priceChangePercentage={`${roundNumber(
-                    coinItem.price_change_percentage_24h
-                  )}%`}
-                />
-              </Link>
-            ))}
-          </InfiniteScroll>
+          <Input
+            placeholder={"Search Cryptocurrency"}
+            value={coinsListStore.searchValue}
+            onChange={handleSearchInputChange}
+          />
+          <Button>Search</Button>
         </div>
+        <div className={classNames(styles["list-coins-page__tabs-container"])}>
+          <Button
+            onClick={() => {
+              handleTabsSelect("");
+            }}
+          >
+            All
+          </Button>
+          <Button
+            onClick={() => {
+              handleTabsSelect("ethereum-ecosystem");
+            }}
+          >
+            ETH-eco
+          </Button>
+        </div>
+      </div>
+      {coinsListStore.meta === Meta.success ||
+      coinsListStore.list.length > 0 ? (
+        <List
+          hasMore={!isCoinsSearching}
+          loadMore={loadMoreCoins}
+          list={coinsListStore.list}
+        />
       ) : (
         <div
           className={classNames(
@@ -116,4 +128,4 @@ const ListCoinsPage: React.FC = () => {
   );
 };
 
-export default ListCoinsPage;
+export default observer(ListCoinsPage);

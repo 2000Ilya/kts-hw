@@ -1,36 +1,31 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import ArrowLeftIcon from "@components/ArrowLeftIcon";
 import { Loader, LoaderSize } from "@components/Loader";
-import { Coin } from "@store/CoinGeckoStore/types";
-import coinGeckoStore from "@store/coinGeckoStoreInstance";
+import CoinInfoStore from "@store/CoinGeckoStore/CoinInfoStore";
+import { Meta } from "@utils/meta";
 import roundNumber from "@utils/roundNumber";
+import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
+import { observer } from "mobx-react-lite";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import styles from "./CoinInfoPage.module.scss";
 
 const CoinInfoPage = () => {
-  const [coin, setCoin] = useState<Coin | null>(null);
-  const [isImageLoading, setImageLoading] = useState<boolean>(true);
-
+  const coinInfoStore = useLocalStore(() => new CoinInfoStore());
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    const fetchCoinData = async () => {
-      const result = await coinGeckoStore.getCoin({
-        coinName: id,
-        queryParameters: {},
-      });
-      setCoin(result.success ? result.data : null);
-    };
-    fetchCoinData();
+    coinInfoStore.getCoin({
+      coinName: id,
+      queryParameters: {},
+    });
+  }, [coinInfoStore]);
 
-    return () => {
-      setCoin(null);
-    };
-  }, []);
+  useEffect(() => {}, [coinInfoStore.meta]);
+
   return (
     <div className={classNames(styles["coin-info-page"])}>
       <div className={classNames(styles["coin-info-page__header-group"])}>
@@ -38,25 +33,26 @@ const CoinInfoPage = () => {
           <ArrowLeftIcon />
         </Link>
         <div className={classNames(styles["coin-info-page__info-group"])}>
-          {coin && (
+          {coinInfoStore.coin && (
             <img
               className={classNames(styles["coin-info-page__coin-image"])}
-              src={coin.image.large}
-              onLoad={() => setImageLoading(false)}
+              src={coinInfoStore.coin.image.large}
             />
           )}
 
-          {isImageLoading && !coin && <Loader size={LoaderSize.s} />}
+          {coinInfoStore.meta === Meta.loading && !coinInfoStore.coin && (
+            <Loader size={LoaderSize.s} />
+          )}
 
           <div
             className={classNames(styles["coin-info-page__coin-name-group"])}
           >
             <h2 className={classNames(styles["coin-info-page__coin-name"])}>
-              {coin && coin.name}
+              {coinInfoStore.coin && coinInfoStore.coin.name}
               <span
                 className={classNames(styles["coin-info-page__coin-symbol"])}
               >
-                {coin && `(${coin.symbol})`}
+                {coinInfoStore.coin && `(${coinInfoStore.coin.symbol})`}
               </span>
             </h2>
           </div>
@@ -64,13 +60,14 @@ const CoinInfoPage = () => {
       </div>
       <div className={classNames(styles["coin-info-page__coin-value-group"])}>
         <h1 className={classNames(styles["coin-info-page__coin-value"])}>
-          {coin && `$${roundNumber(coin.market_data.current_price.usd)}`}
+          {coinInfoStore.coin &&
+            `$${roundNumber(coinInfoStore.coin.market_data.current_price.usd)}`}
           <span className={classNames(styles["coin-info-page__coin-diff"])}>
-            {coin &&
+            {coinInfoStore.coin &&
               `$${roundNumber(
-                coin.market_data.price_change_24h
+                coinInfoStore.coin.market_data.price_change_24h
               )} (${roundNumber(
-                coin.market_data.price_change_percentage_24h
+                coinInfoStore.coin.market_data.price_change_percentage_24h
               )}%)`}
           </span>
         </h1>
@@ -79,4 +76,4 @@ const CoinInfoPage = () => {
   );
 };
 
-export default React.memo(CoinInfoPage);
+export default observer(CoinInfoPage);
