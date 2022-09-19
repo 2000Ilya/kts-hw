@@ -1,3 +1,5 @@
+import React from "react";
+
 import CoinInfoPage from "@components/CoinInfoPage/CoinInfoPage";
 import ListCoinsPage from "@components/ListCoinsPage/ListCoinsPage";
 import { useQueryParamsStoreInit } from "@store/RootStore/hooks/useQueryParamsStoreInit";

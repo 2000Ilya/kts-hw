@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import ArrowLeftIcon from "@components/ArrowLeftIcon";
 import { Loader, LoaderSize } from "@components/Loader";
