@@ -12,10 +12,20 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import styles from "./CoinInfoPage.module.scss";
+import {
+  coinInfoValueStringConstructor,
+  priceStringConstructor,
+} from "@utils/valueStringConstructors";
 
 const CoinInfoPage = () => {
   const coinInfoStore = useLocalStore(() => new CoinInfoStore());
   const { id } = useParams<{ id: string }>();
+  const price: number | undefined =
+    coinInfoStore.coin?.market_data.current_price.usd;
+  const priceDiff: number | undefined =
+    coinInfoStore.coin?.market_data.price_change_24h;
+  const percentageDiff: number | undefined =
+    coinInfoStore.coin?.market_data.price_change_percentage_24h;
 
   useEffect(() => {
     coinInfoStore.getCoin({
@@ -60,16 +70,21 @@ const CoinInfoPage = () => {
       </div>
       <div className={classNames(styles["coin-info-page__coin-value-group"])}>
         <h1 className={classNames(styles["coin-info-page__coin-value"])}>
-          {coinInfoStore.coin &&
-            `$${roundNumber(coinInfoStore.coin.market_data.current_price.usd)}`}
-          <span className={classNames(styles["coin-info-page__coin-diff"])}>
-            {coinInfoStore.coin &&
-              `$${roundNumber(
-                coinInfoStore.coin.market_data.price_change_24h
-              )} (${roundNumber(
-                coinInfoStore.coin.market_data.price_change_percentage_24h
-              )}%)`}
-          </span>
+          {coinInfoStore.coin !== null &&
+            priceStringConstructor("$", `${price}`)}
+
+          {priceDiff !== undefined && percentageDiff !== undefined && (
+            <span
+              className={classNames(
+                styles["coin-info-page__coin-diff"],
+                percentageDiff >= 0
+                  ? styles["coin-info-page__value-growing"]
+                  : styles["coin-info-page__value-dropping"]
+              )}
+            >
+              {coinInfoValueStringConstructor(priceDiff, percentageDiff)}
+            </span>
+          )}
         </h1>
       </div>
     </div>

@@ -53,8 +53,15 @@
     font-weight: 500;
     font-size: 1rem;
     line-height: 1.3rem;
-    color: $green;
     margin: 0;
+  }
+
+  &__value-growing {
+    color: $green;
+  }
+
+  &__value-dropping {
+    color: $red;
   }
 
   &-header {

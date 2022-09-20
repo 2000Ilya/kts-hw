@@ -9,6 +9,10 @@ import { Link } from "react-router-dom";
 import { CoinItemModel } from "../../models/shared/coinGecko/coinItem";
 
 import styles from "./List.module.scss";
+import {
+  percentageStringConstructor,
+  priceStringConstructor,
+} from "@utils/valueStringConstructors";
 
 type ListProps = {
   list: CoinItemModel[];
@@ -49,12 +53,19 @@ const List = ({ list, loadMore, hasMore }: ListProps) => {
               subtitle={coinItem.symbol}
               currentPrice={
                 coinItem.currentPrice !== null
-                  ? `${roundNumber(coinItem.currentPrice)}`
+                  ? priceStringConstructor("$", coinItem.currentPrice)
                   : null
               }
               priceChangePercentage={
                 coinItem.priceChangePercentage24h !== null
-                  ? `${roundNumber(coinItem.priceChangePercentage24h)}%`
+                  ? percentageStringConstructor(
+                      coinItem.priceChangePercentage24h
+                    )
+                  : null
+              }
+              isValueGrowing={
+                coinItem.priceChangePercentage24h !== null
+                  ? coinItem.priceChangePercentage24h >= 0
                   : null
               }
             />

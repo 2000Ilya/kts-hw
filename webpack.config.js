@@ -38,7 +38,8 @@ module.exports = {
   target: !isProd ? "web" : "browserslist",
   devtool: isProd ? "hidden-source-map" : "eval-source-map",
   output: {
-    path: buildPath,
+    path: path.resolve(__dirname, "/"),
+    publicPath: "/",
     filename: "bundle.js",
   },
   plugins: [
@@ -88,6 +89,9 @@ module.exports = {
     host: "127.0.0.1",
     port: 9002,
     hot: true,
+    devMiddleware: {
+      publicPath: "https://localhost:9002/",
+    },
   },
   mode: "development",
 };
