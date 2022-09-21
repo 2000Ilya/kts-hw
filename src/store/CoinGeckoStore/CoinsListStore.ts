@@ -265,6 +265,6 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       if (search !== undefined && typeof search === "string") {
         this._searchValue = search;
       }
-    }, 1000)
+    }, 500)
   );
 }

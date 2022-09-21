@@ -22,6 +22,17 @@ type ListProps = {
   currency: string;
 };
 
+const InfiniteScrollLoader = () => (
+  <div
+    className={classNames(
+      styles["flex-align-center"],
+      styles["list-coins-page__loader-container"]
+    )}
+  >
+    <Loader size={LoaderSize.s} />
+  </div>
+);
+
 const List = ({ list, loadMore, hasMore, currency }: ListProps) => {
   return (
     <div
@@ -35,16 +46,7 @@ const List = ({ list, loadMore, hasMore, currency }: ListProps) => {
         style={{
           overflow: "hidden",
         }}
-        loader={
-          <div
-            className={classNames(
-              styles["flex-align-center"],
-              styles["list-coins-page__loader-container"]
-            )}
-          >
-            <Loader size={LoaderSize.s} />
-          </div>
-        }
+        loader={<InfiniteScrollLoader />}
         scrollableTarget={"coins-list"}
       >
         {list.map((coinItem) => (
