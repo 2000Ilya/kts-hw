@@ -10,6 +10,7 @@ type CardProps = {
   subtitle: React.ReactNode;
   currentPrice: string | null;
   priceChangePercentage: string | null;
+  isValueGrowing: boolean | null;
   content?: React.ReactNode;
   onClick?: React.MouseEventHandler;
 };
@@ -22,6 +23,7 @@ const Card = ({
   priceChangePercentage,
   content,
   onClick,
+  isValueGrowing,
 }: CardProps) => {
   return (
     <div className={classNames(styles.card)} onClick={onClick}>
@@ -35,16 +37,33 @@ const Card = ({
         </div>
       </div>
       {content}
-      {currentPrice !== null && priceChangePercentage !== null && (
-        <div className={classNames(styles["card__value-container"])}>
-          <h1 className={classNames(styles["card-header"], styles.card__value)}>
-            {"$" + currentPrice}
-          </h1>
-          <h4 className={classNames(styles["card__value-diff"])}>
-            {priceChangePercentage}
-          </h4>
-        </div>
-      )}
+      {currentPrice !== null &&
+        priceChangePercentage !== null &&
+        isValueGrowing !== null && (
+          <div className={classNames(styles["card__value-container"])}>
+            <h1
+              className={classNames(
+                styles["card-header"],
+                styles.card__value,
+                isValueGrowing
+                  ? styles["card__value-growing"]
+                  : styles["card__value-dropping"]
+              )}
+            >
+              {currentPrice}
+            </h1>
+            <h4
+              className={classNames(
+                styles["card__value-diff"],
+                isValueGrowing
+                  ? styles["card__value-growing"]
+                  : styles["card__value-dropping"]
+              )}
+            >
+              {priceChangePercentage}
+            </h4>
+          </div>
+        )}
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import axios from "axios";
 import qs from "qs";
 
 import {
@@ -36,19 +37,20 @@ export default class ApiStore implements IApiStore {
           };
 
     try {
-      const response = await fetch(url, requestParams);
+      // const response = await fetch(url, requestParams);
+      const response = await axios({ ...params, url });
 
-      if (response.ok) {
+      if (response.status === 200) {
         return {
           success: true,
-          data: await response.json(),
+          data: response.data,
           status: response.status,
         };
       }
 
       return {
         success: false,
-        data: await response.json(),
+        data: response.data,
         status: response.status,
       };
     } catch (error) {

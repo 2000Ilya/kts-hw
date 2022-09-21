@@ -2,20 +2,26 @@
 
 .coin-info-page {
   width: 37.5rem;
-  background: $white;
+  height: 100vh;
+  background: $light-grey;
   padding-left: 1.6rem;
+  box-sizing: border-box;
+  margin: auto;
+  padding-top: 1.7rem;
 
   &__header-group {
     display: flex;
     flex-direction: row;
     align-items: center;
     height: 2.4rem;
-    margin-top: 1.7rem;
   }
+
   &__back {
     width: 0.93rem;
     height: 1.42rem;
+    cursor: pointer;
   }
+
   &__info-group {
     margin-left: 1.66rem;
     display: flex;
@@ -62,8 +68,15 @@
   &__coin-diff {
     font-size: 1.6rem;
     line-height: 2rem;
-    color: $green;
     margin: 0;
     margin-left: 1.2rem;
+  }
+
+  &__value-growing {
+    color: $green;
+  }
+
+  &__value-dropping {
+    color: $red;
   }
 }

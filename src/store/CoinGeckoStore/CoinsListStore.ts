@@ -12,6 +12,7 @@ import {
   reaction,
   runInAction,
 } from "mobx";
+import _ from "lodash";
 
 import {
   CoinItemModel,
@@ -38,12 +39,13 @@ type PrivateFields =
   | "_meta"
   | "_pageNumber"
   | "_searchValue"
-  | "_category";
+  | "_category"
+  | "_selectedCurrency"
+  | "_currencyList";
 
 export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   private readonly apiStore = new ApiStore(BASE_URL);
   private readonly defaultQueryParams = {
-    vs_currency: "usd",
     order: "market_cap_desc",
     per_page: 10,
     sparkline: false,
@@ -55,11 +57,15 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   private _pageNumber: number = 1;
   private _searchValue: string;
   private _category: string;
+  private _selectedCurrency: string = "usd";
+  private _currencyList: string[] = [];
 
   constructor(inputValue: string, category: string) {
     makeObservable<CoinsListStore, PrivateFields>(this, {
       _list: observable.ref,
+      _currencyList: observable.ref,
       _meta: observable,
+      _selectedCurrency: observable,
       _pageNumber: observable,
       _searchValue: observable,
       _category: observable,
@@ -67,18 +73,25 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       meta: computed,
       addPage: action,
       getCoinsList: action,
+      getCurrencyList: action,
       setInputValue: action,
       setCategory: action,
       clearCoins: action,
+      setCurrency: action,
     });
 
     this._searchValue = inputValue;
     this._category = category;
+    this.getCurrencyList();
     this.getCoinsList();
   }
 
   get list(): CoinItemModel[] {
     return linearizeCollection(this._list);
+  }
+
+  get currencyList(): string[] {
+    return this._currencyList;
   }
 
   get meta(): Meta {
@@ -97,17 +110,33 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
     return this._category;
   }
 
+  get selectedCurrency(): string {
+    return this._selectedCurrency;
+  }
+
+  setCurrency(currency: string) {
+    if (this._selectedCurrency !== currency) {
+      this._selectedCurrency = currency;
+      this.clearCoins();
+      this.getCoinsList();
+    }
+  }
+
   setInputValue(inputValue: string) {
     if (inputValue !== this.searchValue) {
       this._searchValue = inputValue;
+      this._category = "";
+      this._selectedCurrency = "usd";
       this.clearCoins();
       this.getCoinsList();
     }
   }
 
   setCategory(category: string) {
-    if (category !== this.category) {
+    if (category !== this.category || this._searchValue !== "") {
       this._category = category;
+      this._searchValue = "";
+      this._selectedCurrency = "usd";
       this.clearCoins();
       this.getCoinsList();
     }
@@ -131,6 +160,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
         ...this.defaultQueryParams,
         ...params?.queryParameters,
         page: this.pageNumber,
+        vs_currency: this._selectedCurrency,
       };
       if (this.category) {
         data.category = this.category;
@@ -185,6 +215,28 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
     });
   }
 
+  async getCurrencyList(): Promise<void> {
+    this._meta = Meta.loading;
+    this._currencyList = [];
+
+    const response = await this.apiStore.request<string[]>({
+      headers: { Accept: "*/*" },
+      endpoint: `/simple/supported_vs_currencies`,
+      data: {},
+      method: HTTPMethod.GET,
+    });
+
+    runInAction(() => {
+      if (response.success) {
+        this._meta = Meta.success;
+        this._currencyList = response.data;
+        return;
+      }
+
+      this._meta = Meta.error;
+    });
+  }
+
   destroy(): void {
     this._list = getInitialCollectionModel();
     this._meta = Meta.initial;
@@ -209,10 +261,10 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       const search = rootStore.query.getParam("search");
       return search;
     },
-    (search) => {
+    _.debounce((search) => {
       if (search !== undefined && typeof search === "string") {
         this._searchValue = search;
       }
-    }
+    }, 500)
   );
 }
