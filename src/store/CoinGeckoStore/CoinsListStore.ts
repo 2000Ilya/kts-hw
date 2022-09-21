@@ -12,6 +12,7 @@ import {
   reaction,
   runInAction,
 } from "mobx";
+import _ from "lodash";
 
 import {
   CoinItemModel,
@@ -260,10 +261,10 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
       const search = rootStore.query.getParam("search");
       return search;
     },
-    (search) => {
+    _.debounce((search) => {
       if (search !== undefined && typeof search === "string") {
         this._searchValue = search;
       }
-    }
+    }, 1000)
   );
 }
