@@ -4,16 +4,16 @@ import { Button } from "@components/Button";
 import Input from "@components/Input";
 import List from "@components/List/List";
 import { Loader } from "@components/Loader";
+import { MultiDropdown, Option } from "@components/MultiDropdown";
 import CoinsListStore from "@store/CoinGeckoStore/CoinsListStore";
 import { Meta } from "@utils/meta";
 import { useLocalStore } from "@utils/useLocalStore";
+import pluralizeOptions from "@utils/pluralizeOptions";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 
 import styles from "./ListCoinsPage.module.scss";
-import { MultiDropdown, Option } from "@components/MultiDropdown";
-import pluralizeOptions from "@utils/pluralizeOptions";
 
 const ListCoinsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -92,40 +92,46 @@ const ListCoinsPage: React.FC = () => {
           />
           <Button>Search</Button>
         </div>
-        <div className={classNames(styles["list-coins-page__tabs-container"])}>
-          <Button
-            onClick={() => {
-              handleTabsSelect("");
-            }}
+        <div
+          className={classNames(styles["list-coins-page__options-container"])}
+        >
+          <div
+            className={classNames(styles["list-coins-page__tabs-container"])}
           >
-            All
-          </Button>
-          <Button
-            onClick={() => {
-              handleTabsSelect("ethereum-ecosystem");
+            <Button
+              onClick={() => {
+                handleTabsSelect("");
+              }}
+            >
+              All
+            </Button>
+            <Button
+              onClick={() => {
+                handleTabsSelect("ethereum-ecosystem");
+              }}
+            >
+              ETH-eco
+            </Button>
+          </div>
+          <MultiDropdown
+            options={coinsListStore.currencyList.map((e: string) => ({
+              key: e,
+              value: e,
+            }))}
+            value={[
+              {
+                key: coinsListStore.selectedCurrency,
+                value: coinsListStore.selectedCurrency,
+              },
+            ]}
+            onChange={(value: Option[]) => {
+              coinsListStore.setCurrency(value[0].value);
             }}
-          >
-            ETH-eco
-          </Button>
+            disabled={false}
+            pluralizeOptions={pluralizeOptions}
+            hasMultiSelect={false}
+          />
         </div>
-        <MultiDropdown
-          options={coinsListStore.currencyList.map((e: string) => ({
-            key: e,
-            value: e,
-          }))}
-          value={[
-            {
-              key: coinsListStore.selectedCurrency,
-              value: coinsListStore.selectedCurrency,
-            },
-          ]}
-          onChange={(value: Option[]) => {
-            coinsListStore.setCurrency(value[0].value);
-          }}
-          disabled={false}
-          pluralizeOptions={pluralizeOptions}
-          hasMultiSelect={false}
-        />
       </div>
       {coinsListStore.meta === Meta.success ||
       coinsListStore.list.length > 0 ? (
@@ -133,6 +139,7 @@ const ListCoinsPage: React.FC = () => {
           hasMore={!isCoinsSearching}
           loadMore={loadMoreCoins}
           list={coinsListStore.list}
+          currency={coinsListStore.selectedCurrency}
         />
       ) : (
         <div

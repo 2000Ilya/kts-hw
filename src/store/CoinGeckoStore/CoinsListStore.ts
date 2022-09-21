@@ -132,7 +132,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   }
 
   setCategory(category: string) {
-    if (category !== this.category) {
+    if (category !== this.category || this._searchValue !== "") {
       this._category = category;
       this._searchValue = "";
       this._selectedCurrency = "usd";

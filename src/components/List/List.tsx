@@ -13,14 +13,16 @@ import {
   percentageStringConstructor,
   priceStringConstructor,
 } from "@utils/valueStringConstructors";
+import getCurrencySign from "@utils/getCurrencySign";
 
 type ListProps = {
   list: CoinItemModel[];
   loadMore: () => Promise<void> | void;
   hasMore: boolean;
+  currency: string;
 };
 
-const List = ({ list, loadMore, hasMore }: ListProps) => {
+const List = ({ list, loadMore, hasMore, currency }: ListProps) => {
   return (
     <div
       className={classNames(styles["coins-list-container"])}
@@ -53,7 +55,10 @@ const List = ({ list, loadMore, hasMore }: ListProps) => {
               subtitle={coinItem.symbol}
               currentPrice={
                 coinItem.currentPrice !== null
-                  ? priceStringConstructor("$", coinItem.currentPrice)
+                  ? priceStringConstructor(
+                      getCurrencySign(currency),
+                      coinItem.currentPrice
+                    )
                   : null
               }
               priceChangePercentage={
