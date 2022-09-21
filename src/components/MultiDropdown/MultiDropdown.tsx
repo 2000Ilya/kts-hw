@@ -16,6 +16,7 @@ type MultiDropdownProps = {
   value: Option[];
   onChange: (value: Option[]) => void;
   disabled?: boolean;
+  hasMultiSelect: boolean;
   pluralizeOptions: (value: Option[]) => string;
 };
 
@@ -26,6 +27,7 @@ export const MultiDropdown = React.memo(
     onChange,
     disabled,
     pluralizeOptions,
+    hasMultiSelect,
   }: MultiDropdownProps) => {
     const [isOptionsShowing, setOptionsShowing] = useState(false);
 
@@ -45,17 +47,22 @@ export const MultiDropdown = React.memo(
 
     const handleOptionClick = useCallback(
       (selectedField: Option) => {
-        const indexOfOption = value.findIndex(getIndexOfOption);
-        if (indexOfOption !== -1) {
-          onChange(
-            value.filter(
-              (val) =>
-                val.key !== selectedField.key &&
-                val.value !== selectedField.value
-            )
-          );
+        if (hasMultiSelect) {
+          const indexOfOption = value.findIndex(getIndexOfOption);
+          if (indexOfOption !== -1) {
+            onChange(
+              value.filter(
+                (val) =>
+                  val.key !== selectedField.key &&
+                  val.value !== selectedField.value
+              )
+            );
+          } else {
+            onChange(value.concat([selectedField]));
+          }
         } else {
-          onChange(value.concat([selectedField]));
+          onChange((value = [selectedField]));
+          setOptionsShowing(false);
         }
       },
       [value]

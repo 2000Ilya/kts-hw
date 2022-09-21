@@ -12,6 +12,8 @@ import { observer } from "mobx-react-lite";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 
 import styles from "./ListCoinsPage.module.scss";
+import { MultiDropdown, Option } from "@components/MultiDropdown";
+import pluralizeOptions from "@utils/pluralizeOptions";
 
 const ListCoinsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -106,6 +108,24 @@ const ListCoinsPage: React.FC = () => {
             ETH-eco
           </Button>
         </div>
+        <MultiDropdown
+          options={coinsListStore.currencyList.map((e: string) => ({
+            key: e,
+            value: e,
+          }))}
+          value={[
+            {
+              key: coinsListStore.selectedCurrency,
+              value: coinsListStore.selectedCurrency,
+            },
+          ]}
+          onChange={(value: Option[]) => {
+            coinsListStore.setCurrency(value[0].value);
+          }}
+          disabled={false}
+          pluralizeOptions={pluralizeOptions}
+          hasMultiSelect={false}
+        />
       </div>
       {coinsListStore.meta === Meta.success ||
       coinsListStore.list.length > 0 ? (

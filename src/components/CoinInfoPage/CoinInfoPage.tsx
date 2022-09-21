@@ -4,12 +4,10 @@ import ArrowLeftIcon from "@components/ArrowLeftIcon";
 import { Loader, LoaderSize } from "@components/Loader";
 import CoinInfoStore from "@store/CoinGeckoStore/CoinInfoStore";
 import { Meta } from "@utils/meta";
-import roundNumber from "@utils/roundNumber";
 import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
 import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 import styles from "./CoinInfoPage.module.scss";
 import {
