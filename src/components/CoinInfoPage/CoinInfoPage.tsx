@@ -8,7 +8,7 @@ import roundNumber from "@utils/roundNumber";
 import { useLocalStore } from "@utils/useLocalStore";
 import classNames from "classnames";
 import { observer } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import styles from "./CoinInfoPage.module.scss";
@@ -16,10 +16,14 @@ import {
   coinInfoValueStringConstructor,
   priceStringConstructor,
 } from "@utils/valueStringConstructors";
+import Chart from "@components/Chart";
 
 const CoinInfoPage = () => {
-  const coinInfoStore = useLocalStore(() => new CoinInfoStore());
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const coinInfoStore: CoinInfoStore = useLocalStore(
+    () => new CoinInfoStore(id !== undefined ? id : "")
+  );
   const price: number | undefined =
     coinInfoStore.coin?.market_data.current_price.usd;
   const priceDiff: number | undefined =
@@ -27,21 +31,17 @@ const CoinInfoPage = () => {
   const percentageDiff: number | undefined =
     coinInfoStore.coin?.market_data.price_change_percentage_24h;
 
-  useEffect(() => {
-    coinInfoStore.getCoin({
-      coinName: id,
-      queryParameters: {},
-    });
-  }, [coinInfoStore]);
-
   useEffect(() => {}, [coinInfoStore.meta]);
 
   return (
     <div className={classNames(styles["coin-info-page"])}>
       <div className={classNames(styles["coin-info-page__header-group"])}>
-        <Link to={"/coins"} className={classNames(styles["coin-info__back"])}>
+        <div
+          onClick={() => navigate(-1)}
+          className={classNames(styles["coin-info-page__back"])}
+        >
           <ArrowLeftIcon />
-        </Link>
+        </div>
         <div className={classNames(styles["coin-info-page__info-group"])}>
           {coinInfoStore.coin && (
             <img
@@ -86,6 +86,11 @@ const CoinInfoPage = () => {
             </span>
           )}
         </h1>
+      </div>
+      <div style={{ height: "345px", width: "100%" }}>
+        {coinInfoStore.chartData !== null && (
+          <Chart data={coinInfoStore.chartData} />
+        )}
       </div>
     </div>
   );
