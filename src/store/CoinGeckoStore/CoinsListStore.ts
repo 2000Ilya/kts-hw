@@ -100,6 +100,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   setInputValue(inputValue: string) {
     if (inputValue !== this.searchValue) {
       this._searchValue = inputValue;
+      this._category = "";
       this.clearCoins();
       this.getCoinsList();
     }
@@ -108,6 +109,7 @@ export default class CoinsListStore implements ICoinsListStore, ILocalStore {
   setCategory(category: string) {
     if (category !== this.category) {
       this._category = category;
+      this._searchValue = "";
       this.clearCoins();
       this.getCoinsList();
     }
