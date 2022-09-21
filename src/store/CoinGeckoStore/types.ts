@@ -45,10 +45,18 @@ export type Coin = {
   symbol: string;
   id: string;
 };
+export type ChartDataParsed = { name: string; price: number } | undefined;
+export type ChartData = [number, number][];
+
+export type Chart = {
+  prices: ChartData;
+};
+
 export interface ICoinsListStore {
   getCoinsList(params?: GetCoinsListParams): Promise<void>;
 }
 
 export interface ICoinInfoStore {
   getCoin(params?: GetCoinParams): Promise<void>;
+  getChartData(params?: GetCoinParams): Promise<void>;
 }
