@@ -1,4 +1,7 @@
 {
+  "browserslist": [
+    "last 1 version, not dead, ie >= 11"
+  ],
   "homepage": "http://2000Ilya.github.io/kts-hw",
   "name": "kts-hw5",
   "version": "1.0.0",
