@@ -18,6 +18,3 @@ root.render(
   </React.StrictMode>
 );
 
-if (module.hot) {
-  module.hot.accept();
-}
