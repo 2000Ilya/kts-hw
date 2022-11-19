@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/kts-hw/static/css/main.10a5543c.css",
+    "main.js": "/kts-hw/static/js/main.4b7f2f0c.js",
+    "static/media/CircularStd-Medium.ttf": "/kts-hw/static/media/CircularStd-Medium.f9f2be1512962ebe2bdc.ttf",
+    "static/media/CircularStd-Book.ttf": "/kts-hw/static/media/CircularStd-Book.8dd9b00439575cc09ae4.ttf",
+    "index.html": "/kts-hw/index.html",
+    "main.10a5543c.css.map": "/kts-hw/static/css/main.10a5543c.css.map",
+    "main.4b7f2f0c.js.map": "/kts-hw/static/js/main.4b7f2f0c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.10a5543c.css",
+    "static/js/main.4b7f2f0c.js"
+  ]
+}
