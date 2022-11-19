@@ -1,4 +1,5 @@
 {
+  "hostname": "2000Ilya.github.io/kts-hw",
   "name": "coins-app",
   "version": "0.1.0",
   "private": true,
@@ -26,6 +27,8 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
