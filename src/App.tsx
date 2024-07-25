@@ -10,9 +10,9 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path={"/coins"} element={<ListCoinsPage />} />
-      <Route path={"/coins/:id"} element={<CoinInfoPage />} />
-      <Route path="*" element={<Navigate replace to="/coins" />} />
+      <Route path={"/kts-hw/coins"} element={<ListCoinsPage />} />
+      <Route path={"/kts-hw/coins/:id"} element={<CoinInfoPage />} />
+      <Route path="*" element={<Navigate replace to="/kts-hw/coins" />} />
     </Routes>
   );
 };
